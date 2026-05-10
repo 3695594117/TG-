@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>faiwnhd 初心永卡</title>
+<style>
+* {margin: 0;padding: 0;box-sizing: border-box;font-family: "微软雅黑",sans-serif;}
+body {
+  width: 100vw;height: 100vh;
+  background: #080810;overflow: hidden;color: #fff;
+}
+/* 漂浮雪花 */
+.snow {
+  position: fixed;top: -15px;pointer-events: none;
+  color: #ffffff;opacity: 0.7;z-index: 1;
+  animation: snowFall linear infinite;
+}
+@keyframes snowFall {
+  0%{transform: translateY(0) rotate(0deg);}
+  100%{transform: translateY(100vh) rotate(360deg);}
+}
+.topLogo{
+  position: fixed;top:15px;width:100%;
+  text-align:center;font-size:26px;
+  color:#ffd300;font-weight:bold;
+  text-shadow:0 0 12px #ff9900;z-index:2;
+}
+.page{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.hide{display:none !important;}
+
+/* 密码页 */
+.loginBox h2{color:#ffd300;margin-bottom:25px;}
+.loginBox input{
+  width:320px;height:50px;background:#151525;
+  border:2px solid #ffd300;border-radius:10px;
+  color:#fff;text-align:center;font-size:16px;
+  outline:none;margin-bottom:20px;
+}
+.loginBox button{
+  width:150px;height:44px;
+  background:linear-gradient(120deg,#ffd300,#ff7700);
+  border:none;border-radius:8px;color:#000;
+  font-weight:bold;cursor:pointer;font-size:15px;
+}
+
+/* 提示弹窗 */
+.msgPop{
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);
+  display:flex;align-items:center;justify-content:center;z-index:9997;
+}
+.msgCard{
+  background:#121220;border:2px solid #ffd300;
+  border-radius:10px;padding:35px 60px;text-align:center;
+}
+.msgCard p{color:#ffd300;font-size:17px;margin-bottom:20px;line-height:1.6;}
+.msgCard button{
+  padding:6px 22px;background:#ffd300;
+  border:none;border-radius:4px;color:#000;
+  font-weight:bold;cursor:pointer;
+}
+
+/* 加载页 */
+.loadPage{gap:30px;}
+.loadText{font-size:19px;color:#ffd300;}
+.proWrap{
+  width:380px;height:24px;background:#1a1a2a;
+  border-radius:12px;overflow:hidden;border:1px solid #ffd300;
+}
+.proBar{
+  width:0%;height:100%;
+  background:linear-gradient(90deg,#ffd300,#ff4400);
+  transition:all 0.1s;
+}
+
+/* 主界面 */
+.mainPage{gap:18px;}
+.mainPage h3{color:#ffd300;margin-bottom:15px;font-size:20px;}
+.mainPage button{
+  width:240px;height:52px;background:#111;
+  border:2px solid #ffd300;border-radius:10px;
+  color:#ffd300;font-size:16px;cursor:pointer;
+  transition:0.2s;
+}
+.mainPage button:hover{background:#ffd300;color:#000;}
+
+/* 功能悬浮窗 */
+.floatMenu{
+  display:none;position:fixed;top:60px;left:15px;
+  width:300px;height:480px;background:rgba(8,8,15,0.96);
+  border:2px solid #ffd300;border-radius:12px;z-index:9999;
+  overflow:hidden;user-select:none;
+}
+.floatHead{
+  height:38px;background:#ffd300;display:flex;
+  align-items:center;justify-content:space-between;
+  padding:0 10px;cursor:move;
+}
+.floatHead span{color:#000;font-weight:bold;font-size:14px;}
+.closeFloatBtn{
+  background:#ff2222;border:none;color:#fff;
+  width:22px;height:22px;border-radius:3px;cursor:pointer;
+}
+.tabNav{
+  display:flex;height:42px;background:#151525;
+}
+.tabNav div{
+  flex:1;text-align:center;line-height:42px;
+  font-size:13px;color:#ccc;cursor:pointer;
+}
+.tabNav div.active{background:#ffd300;color:#000;font-weight:bold;}
+.contentBox{
+  height:calc(100% - 80px);
+  overflow-y:auto;padding:12px;font-size:13px;
+}
+.contentBox::-webkit-scrollbar{width:5px;}
+.contentBox::-webkit-scrollbar-thumb{background:#ffd300;border-radius:2px;}
+.opt{margin:10px 0;}
+.opt label{display:inline-block;width:110px;}
+input[type="range"]{width:120px;}
+.smBtn{
+  padding:4px 8px;background:#ffd300;
+  border:none;border-radius:3px;color:#000;
+  cursor:pointer;margin:2px;
+}
+
+/* 购买卡密悬浮窗 */
+.buyFloat{
+  display:none;position:fixed;top:80px;right:20px;
+  width:280px;background:#10101a;border:2px solid #ff3366;
+  border-radius:10px;z-index:9999;padding:15px;
+}
+.buyFloat h4{color:#ff3366;text-align:center;margin-bottom:15px;}
+.buyItem{padding:10px 0;border-bottom:1px solid #222;color:#fff;text-align:center;line-height:1.5;}
+.closeBtn{width:100%;margin-top:10px;padding:6px 0;border:none;border-radius:5px;color:#fff;cursor:pointer;}
+.closeRed{background:#ff3366;}
+.closeBlue{background:#3366ff;}
+
+/* 制作成员悬浮窗 */
+.teamFloat{
+  display:none;position:fixed;top:180px;right:20px;
+  width:260px;background:#10101a;border:2px solid #3366ff;
+  border-radius:10px;z-index:9999;padding:15px;
+}
+.teamFloat h4{color:#3366ff;text-align:center;margin-bottom:15px;}
+.teamItem{padding:10px 0;border-bottom:1px solid #222;color:#fff;text-align:center;}
+
+/* 格机黑屏 */
+.gejiUi{
+  display:none;position:fixed;inset:0;
+  background:#000;z-index:99999;
+  text-align:center;padding-top:200px;
+  font-size:40px;color:red;font-weight:bold;
+}
+</style>
+</head>
+<body>
+<div class="topLogo">初心NB666</div>
+
+<!-- 1.卡网密码页 -->
+<div class="page loginBox" id="page1">
+  <h2>faiwnhd初心 卡网验证</h2>
+  <input type="text" id="pwdInp" placeholder="请输入卡网密码">
+  <button onclick="checkPwd()">确认验证</button>
+</div>
+
+<!-- 永卡用户提示 -->
+<div class="msgPop hide" id="msgModal">
+  <div class="msgCard">
+    <p>检测到是尊敬的永卡用户<br>已为您自动屏蔽</p >
+    <button onclick="nextStep()">我已知晓</button>
+  </div>
+</div>
+
+<!-- 2.注入加载页 -->
+<div class="page loadPage hide" id="page2">
+  <div class="loadText">正常注入超自然中请耐心等待</div>
+  <div class="proWrap">
+    <div class="proBar" id="bar"></div>
+  </div>
+</div>
+
+<!-- 3.主功能页面 -->
+<div class="page mainPage hide" id="page3">
+  <h3>服务器连接正常</h3>
+  <button onclick="openFloat()">开启悬浮窗</button>
+  <button onclick="openBuy()">购买卡密</button>
+  <button onclick="openTeam()">制作成员</button>
+  <button onclick="openSuper()">开启超自然行动组</button>
+</div>
+
+<!-- 主功能悬浮窗 -->
+<div class="floatMenu" id="floatWin">
+  <div class="floatHead" id="dragMove">
+    <span>初心功能菜单</span>
+    <button class="closeFloatBtn" onclick="closeFloat()">×</button>
+  </div>
+  <div class="tabNav">
+    <div class="active" data-tab="home">主页</div>
+    <div data-tab="silent">静默</div>
+    <div data-tab="func">功能</div>
+    <div data-tab="draw">绘制</div>
+  </div>
+  <div class="contentBox">
+    <!-- 主页 -->
+    <div class="tabCon" id="home">
+      <div class="opt"><button class="smBtn">初始化</button></div>
+      <div class="opt"><button class="smBtn" onclick="showGeji()">格机</button></div>
+      <div style="margin-top:20px;color:#ffd300;line-height:1.7;">
+        公告：尊敬的永卡用户祝您玩的愉快 为了感谢你玩此项目石头直接送你了
+      </div>
+    </div>
+    <!-- 静默 -->
+    <div class="tabCon" id="silent" style="display:none">
+      <div class="opt"><input type="checkbox"> 静默按钮</div>
+      <div class="opt">
+        <label>爆炸弓瞬击</label>
+        <input type="range" min="1" max="100" value="10" id="bowR">
+        <span id="bowV">10</span>
+      </div>
+      <div style="margin:12px 0;color:#ffd300">自定义参数(上限100套)</div>
+      <div class="opt">
+        <div>子弹速度：<input style="width:50px;background:#222;border:1px solid #ffd300;color:#fff"></div>
+        <div>高伤补偿：<input style="width:50px;background:#222;border:1px solid #ffd300;color:#fff"></div>
+        <div>预判点数：<input style="width:50px;background:#222;border:1px solid #ffd300;color:#fff"></div>
+      </div>
+      <button class="smBtn" onclick="addParam()">添加参数</button>
+      <button class="smBtn" onclick="delParam()">删减参数</button>
+      <div style="margin-top:8px">当前：<span id="pNum">0</span>/100</div>
+    </div>
+    <!-- 功能 -->
+    <div class="tabCon" id="func" style="display:none">
+      <div class="opt"><input type="checkbox"> 长枪范围</div>
+      <div class="opt"><input type="checkbox"> 折扇范围</div>
+      <div class="opt"><input type="checkbox"> 长鞭范围</div>
+      <div class="opt"><input type="checkbox"> 桃木剑范围</div>
+      <div class="opt"><input type="checkbox"> 长枪无后摇</div>
+      <div class="opt"><input type="checkbox"> 折扇无后摇</div>
+      <div class="opt"><input type="checkbox"> 长鞭无后摇</div>
+      <div class="opt"><input type="checkbox"> 桃木剑无后摇</div>
+      <div class="opt">
+        <label>实体旋转速度</label>
+        <input type="range" min="1" max="50" value="20">
+      </div>
+      <div class="opt"><input type="checkbox"> 自动切枪</div>
+      <div class="opt"><input type="checkbox"> 自动切喷包</div>
+      <div class="opt"><input type="checkbox"> 自动换弹</div>
+      <div class="opt"><input type="checkbox"> 杀戮光环</div>
+      <div class="opt"><input type="checkbox"> 枪械无后</div>
+      <div class="opt"><input type="checkbox"> 自动闪避</div>
+      <div class="opt">
+        <label>场景加速</label>
+        <input type="range" min="1" max="40" value="10">
+      </div>
+      <div class="opt">
+        <label>视野亮度</label>
+        <input type="range" min="1" max="40" value="15">
+      </div>
+      <div class="opt"><input type="checkbox"> 广角</div>
+    </div>
+    <!-- 绘制 -->
+    <div class="tabCon" id="draw" style="display:none">
+      <div class="opt"><input type="checkbox"> 绘制方框</div>
+      <div class="opt"><input type="checkbox"> 绘制人数</div>
+      <div class="opt"><input type="checkbox"> 绘制射线</div>
+      <div class="opt"><input type="checkbox"> 绘制怪物</div>
+      <div class="opt"><input type="checkbox"> 绘制队友</div>
+      <div class="opt">
+        <label>回收物最低价值</label>
+        <input type="range" min="10000" max="5000000" step="10000" value="10000">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 购买卡密悬浮窗 -->
+<div class="buyFloat" id="buyWin">
+  <h4>初心卡密购买</h4>
+  <div class="buyItem">天卡 —— 13元</div>
+  <div class="buyItem">周卡 —— 78元</div>
+  <div class="buyItem">月卡 —— 91元</div>
+  <div class="buyItem">永久卡 —— 781391元<br>买了永卡的石头木猪随便玩</div>
+  <button class="closeBtn closeRed" onclick="closeBuy()">关闭</button>
+</div>
+
+<!-- 制作成员悬浮窗 -->
+<div class="teamFloat" id="teamWin">
+  <h4>制作成员介绍</h4>
+  <div class="teamItem">此项目总负责人：初心</div>
+  <div class="teamItem">成员：TG白龙</div>
+  <div class="teamItem">宣传：归零</div>
+  <button class="closeBtn closeBlue" onclick="closeTeam()">关闭</button>
+</div>
+
+<!-- 格机黑屏页面 -->
+<div class="gejiUi" id="gejiBox">
+  你被格机了！
+</div>
+
+<script>
+// 雪花特效
+function makeSnow(){
+  let s=document.createElement("div");
+  s.className="snow";s.innerText="❄";
+  s.style.left=Math.random()*100+"vw";
+  s.style.fontSize=Math.random()*8+5+"px";
+  s.style.animationDuration=Math.random()*4+2+"s";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),8000);
+}
+setInterval(makeSnow,200);
+
+// 密码验证 初心NB
+function checkPwd(){
+  let pwd=document.getElementById("pwdInp").value.trim();
+  if(pwd==="初心NB"){
+    document.getElementById("msgModal").classList.remove("hide");
+  }else{
+    alert("密码错误！");
+  }
+}
+
+// 加载进度跳转
+function nextStep(){
+  document.getElementById("msgModal").classList.add("hide");
+  document.getElementById("page1").classList.add("hide");
+  document.getElementById("page2").classList.remove("hide");
+  let progress=0;
+  let bar=document.getElementById("bar");
+  let t=setInterval(()=>{
+    progress++;
+    bar.style.width=progress+"%";
+    if(progress>=100){
+      clearInterval(t);
+      setTimeout(()=>{
+        document.getElementById("page2").classList.add("hide");
+        document.getElementById("page3").classList.remove("hide");
+      },200);
+    }
+  },30);
+}
+
+// 窗口控制
+let floatWin=document.getElementById("floatWin");
+function openFloat(){floatWin.style.display="block";}
+function closeFloat(){floatWin.style.display="none";}
+
+let buyWin=document.getElementById("buyWin");
+function openBuy(){buyWin.style.display="block";}
+function closeBuy(){buyWin.style.display="none";}
+
+let teamWin=document.getElementById("teamWin");
+function openTeam(){teamWin.style.display="block";}
+function closeTeam(){teamWin.style.display="none";}
+
+function openSuper(){alert("✅ 超自然行动组 开启成功");}
+
+// 标签切换
+let tabs=document.querySelectorAll(".tabNav div");
+let contents=document.querySelectorAll(".tabCon");
+tabs.forEach((item,idx)=>{
+  item.onclick=()=>{
+    tabs.forEach(i=>i.classList.remove("active"));
+    item.classList.add("active");
+    contents.forEach(c=>c.style.display="none");
+    contents[idx].style.display="block";
+  }
+});
+
+// 爆炸弓数值同步
+let bowR=document.getElementById("bowR");
+let bowV=document.getElementById("bowV");
+bowR.oninput=()=>bowV.innerText=bowR.value;
+
+// 悬浮窗拖动
+let dragMove=document.getElementById("dragMove");
+let dragStatus=false,ox,oy;
+dragMove.onmousedown=e=>{
+  dragStatus=true;
+  ox=e.clientX-floatWin.offsetLeft;
+  oy=e.clientY-floatWin.offsetTop;
+};
+document.onmousemove=e=>{
+  if(!dragStatus)return;
+  floatWin.style.left=(e.clientX-ox)+"px";
+  floatWin.style.top=(e.clientY-oy)+"px";
+};
+document.onmouseup=()=>dragStatus=false;
+
+// 自定义参数 上限100
+let pCount=0;
+function addParam(){
+  if(pCount>=100)return alert("最多添加100套参数！");
+  pCount++;
+  document.getElementById("pNum").innerText=pCount;
+}
+function delParam(){
+  if(pCount>0)pCount--;
+  document.getElementById("pNum").innerText=pCount;
+}
+
+// 格机页面
+function showGeji(){
+  document.getElementById("gejiBox").style.display="block";
+}
+</script>
+</body>
+</html>
