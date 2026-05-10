@@ -44,7 +44,7 @@
             z-index: 2;
         }
 
-        /* 顶部Logo优化视觉效果 */
+        /* 顶部Logo优化视觉效果 - 白色系 */
         .topLogo {
             position: fixed;
             top: 18px;
@@ -53,8 +53,8 @@
             text-align: center;
             font-size: 28px;
             font-weight: bold;
-            color: #ffdd55;
-            text-shadow: 0 0 15px #ff9900, 0 0 5px #00000080;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(0,0,0,0.5), 0 0 12px #00000080;
             letter-spacing: 2px;
             z-index: 20;
             pointer-events: none;
@@ -68,7 +68,7 @@
             position: fixed;
             top: -15px;
             pointer-events: none;
-            color: rgba(255, 255, 245, 0.85);
+            color: rgba(255, 255, 255, 0.85);
             z-index: 25;
             font-weight: lighter;
             animation: snowFall linear infinite;
@@ -88,7 +88,7 @@
             border-radius: 48px;
             padding: 2rem 1.8rem;
             box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
-            border: 1px solid rgba(255, 220, 100, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.35);
             transition: all 0.3s ease;
             display: none;
             flex-direction: column;
@@ -102,10 +102,10 @@
             display: none !important;
         }
 
-        /* 密码页 */
+        /* 密码页 - 白色字体 */
         .loginBox h2 {
-            color: #ffdd77;
-            text-shadow: 0 0 8px #ff9900;
+            color: #ffffff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
             margin-bottom: 28px;
             font-size: 1.8rem;
         }
@@ -114,9 +114,9 @@
             max-width: 320px;
             height: 52px;
             background: #0f1422cc;
-            border: 2px solid #ffd966;
+            border: 2px solid rgba(255,255,255,0.6);
             border-radius: 50px;
-            color: #fff5e0;
+            color: #ffffff;
             text-align: center;
             font-size: 1rem;
             outline: none;
@@ -125,13 +125,13 @@
             transition: 0.2s;
         }
         .loginBox input:focus {
-            border-color: #ffaa33;
-            box-shadow: 0 0 12px #ffbb55;
+            border-color: #ffffff;
+            box-shadow: 0 0 12px rgba(255,255,255,0.5);
         }
         .loginBox button {
             width: 180px;
             height: 48px;
-            background: linear-gradient(120deg, #ffcc44, #ff9911);
+            background: linear-gradient(120deg, #e0e0e0, #b0b0b0);
             border: none;
             border-radius: 60px;
             font-weight: bold;
@@ -143,11 +143,11 @@
         }
         .loginBox button:hover {
             transform: scale(0.96);
-            background: linear-gradient(120deg, #ffdd66, #ffaa33);
-            box-shadow: 0 0 18px #ffcc55;
+            background: linear-gradient(120deg, #ffffff, #cccccc);
+            box-shadow: 0 0 18px rgba(255,255,255,0.6);
         }
 
-        /* 提示弹窗 */
+        /* 提示弹窗 - 白色字体 */
         .msgPop {
             position: fixed;
             inset: 0;
@@ -160,34 +160,36 @@
         }
         .msgCard {
             background: #121826dd;
-            border: 2px solid #ffd966;
+            border: 2px solid rgba(255,255,255,0.7);
             border-radius: 28px;
             padding: 32px 40px;
             text-align: center;
             backdrop-filter: blur(16px);
         }
         .msgCard p {
-            color: #ffeaac;
+            color: #ffffff;
             font-size: 1.2rem;
             margin-bottom: 20px;
+            text-shadow: 0 0 2px black;
         }
         .msgCard button {
-            background: #ffcc44;
+            background: #dddddd;
             border: none;
             padding: 8px 28px;
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
+            color: #111;
         }
 
-        /* 加载页 */
+        /* 加载页 - 白色字体 */
         .loadPage {
             gap: 25px;
         }
         .loadText {
             font-size: 1.3rem;
-            color: #ffeaaf;
-            text-shadow: 0 0 6px #ffaa33;
+            color: #ffffff;
+            text-shadow: 0 0 6px rgba(0,0,0,0.5);
         }
         .proWrap {
             width: 90%;
@@ -196,32 +198,33 @@
             background: #0e1424cc;
             border-radius: 30px;
             overflow: hidden;
-            border: 1px solid #ffcc66;
+            border: 1px solid rgba(255,255,255,0.6);
         }
         .proBar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #ffdd66, #ff8833);
+            background: linear-gradient(90deg, #dddddd, #888888);
             transition: width 0.06s linear;
         }
 
-        /* 主功能页面 */
+        /* 主功能页面 - 白色字体 */
         .mainPage {
             gap: 18px;
         }
         .mainPage h3 {
-            color: #ffdd99;
+            color: #ffffff;
             margin-bottom: 10px;
             font-size: 1.6rem;
             font-weight: 600;
+            text-shadow: 0 0 4px black;
         }
         .mainPage button {
             width: 260px;
             height: 54px;
             background: #10131fdd;
-            border: 2px solid #ffcc55;
+            border: 2px solid rgba(255,255,255,0.7);
             border-radius: 48px;
-            color: #ffecb3;
+            color: #ffffff;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
@@ -229,13 +232,13 @@
             transition: 0.2s;
         }
         .mainPage button:hover {
-            background: #ffcc55;
-            color: #211c0a;
-            border-color: #fff0bb;
+            background: rgba(255,255,255,0.8);
+            color: #000000;
+            border-color: #ffffff;
             transform: scale(0.97);
         }
 
-        /* 悬浮窗：主题色保持亮金 + 玻璃质感 */
+        /* 悬浮窗：白色系字体 */
         .floatMenu {
             position: fixed;
             top: 70px;
@@ -244,7 +247,7 @@
             max-height: 520px;
             background: rgba(12, 16, 28, 0.96);
             backdrop-filter: blur(16px);
-            border: 2px solid #ffd966;
+            border: 2px solid rgba(255,255,255,0.6);
             border-radius: 20px;
             z-index: 10000;
             overflow: hidden;
@@ -253,18 +256,19 @@
             flex-direction: column;
         }
         .floatHead {
-            background: #ffcc44;
+            background: rgba(50,50,70,0.9);
             padding: 10px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
             user-select: none;
-            color: #1e1a06;
+            color: #ffffff;
             font-weight: bold;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
         }
         .closeFloatBtn {
-            background: #c23b22;
+            background: #aa3333;
             border: none;
             color: white;
             width: 26px;
@@ -282,13 +286,13 @@
             text-align: center;
             padding: 10px 0;
             font-size: 0.85rem;
-            color: #ffefcf;
+            color: #f0f0f0;
             cursor: pointer;
             transition: 0.1s;
         }
         .tabNav div.active {
-            background: #ffcc55;
-            color: #151a00;
+            background: rgba(255,255,255,0.9);
+            color: #000000;
             font-weight: bold;
         }
         .contentBox {
@@ -296,12 +300,13 @@
             overflow-y: auto;
             padding: 14px;
             font-size: 0.85rem;
+            color: #ffffff;
         }
         .contentBox::-webkit-scrollbar {
             width: 4px;
         }
         .contentBox::-webkit-scrollbar-thumb {
-            background: #ffbb44;
+            background: #bbbbbb;
             border-radius: 4px;
         }
         .opt {
@@ -310,22 +315,26 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 8px;
+            color: #ffffff;
         }
         .opt label {
             width: 110px;
             font-size: 0.85rem;
+            color: #ffffff;
         }
         input[type="range"] {
             width: 120px;
+            background: #333;
         }
         .smBtn {
-            background: #ffcc44;
+            background: rgba(220,220,220,0.9);
             border: none;
             padding: 5px 12px;
             border-radius: 18px;
             font-weight: bold;
             margin-right: 6px;
             cursor: pointer;
+            color: #111;
         }
         .buyFloat, .teamFloat {
             position: fixed;
@@ -337,33 +346,34 @@
             border-radius: 20px;
             padding: 16px;
             z-index: 10001;
-            border: 2px solid #ffaa66;
+            border: 2px solid rgba(255,255,255,0.6);
             display: none;
         }
         .buyFloat h4, .teamFloat h4 {
-            color: #ffbb66;
+            color: #ffffff;
             text-align: center;
             margin-bottom: 12px;
+            text-shadow: 0 0 2px black;
         }
         .buyItem, .teamItem {
             padding: 8px 0;
-            border-bottom: 1px solid #2f3650;
+            border-bottom: 1px solid #4a4f6e;
             text-align: center;
-            color: #ffecce;
+            color: #ffffff;
         }
         .closeBtn {
             width: 100%;
             margin-top: 12px;
-            background: #ff884d;
+            background: #555;
             border: none;
             padding: 6px;
             border-radius: 40px;
-            color: #191e00;
+            color: white;
             font-weight: bold;
             cursor: pointer;
         }
         .closeRed {
-            background: #ff6644;
+            background: #aa4444;
         }
         .closeBlue {
             background: #4488ff;
@@ -379,6 +389,33 @@
             font-size: 3rem;
             color: red;
             font-weight: bold;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+        /* 辅助白色文本 */
+        .gejiUi span {
+            font-size: 1rem;
+            color: #ccc;
+        }
+        .contentBox input, .contentBox select, .contentBox div {
+            color: #ffffff;
+        }
+        .contentBox input[type="text"] {
+            background: #1e1f2e;
+            border: 1px solid #aaa;
+            color: white;
+            padding: 4px;
+            border-radius: 8px;
+        }
+        .opt div {
+            color: #ffffff;
+        }
+        /* 复选框样式微调保持可见 */
+        input[type="checkbox"] {
+            accent-color: #ffffff;
+            transform: scale(1.05);
+            margin-right: 6px;
         }
         /* 适应移动端 */
         @media (max-width: 500px) {
@@ -412,7 +449,7 @@
     <div class="proWrap">
         <div class="proBar" id="bar"></div>
     </div>
-    <div style="font-size: 12px; margin-top: 12px; color: #ffcc77;">解除ACE · 连接主服务器</div>
+    <div style="font-size: 12px; margin-top: 12px; color: #ffffff; text-shadow: 0 0 2px black;">解除ACE · 连接主服务器</div>
 </div>
 
 <!-- 3. 主功能页 -->
@@ -441,48 +478,48 @@
         <div class="tabCon" id="home">
             <div class="opt"><button class="smBtn" onclick="showGeji()">⚠️ 格机</button></div>
             <div class="opt"><button class="smBtn">重载配置</button></div>
-            <div style="margin-top: 18px; color: #ffdd99; background: #00000066; padding: 8px; border-radius: 16px;">
+            <div style="margin-top: 18px; background: #00000066; padding: 8px; border-radius: 16px; color: #ffffff;">
                 📢 公告：永久卡用户尊享全体系石头/木猪直接送<br>
                 超自然协议已加载 ｜ 自瞄优化版
             </div>
         </div>
         <!-- 静默页 -->
         <div class="tabCon" id="silent" style="display:none">
-            <div class="opt"><input type="checkbox" id="silentToggle"> 静默自瞄开关</div>
+            <div class="opt"><input type="checkbox" id="silentToggle"> <label>静默自瞄开关</label></div>
             <div class="opt">
                 <label>爆炸弓瞬击</label>
                 <input type="range" id="bowR" min="1" max="100" value="36">
                 <span id="bowV">36</span>
             </div>
-            <div style="margin:12px 0; color:#ffcc77;">⚙️ 自定义参数(上限100套)</div>
+            <div style="margin:12px 0; color:#ffffff;">⚙️ 自定义参数(上限100套)</div>
             <div class="opt">
-                <div>子弹速度：<input id="bulSpeed" style="width:60px; background:#1e1f2e; border:1px solid #ffaa44; color:#fff;"></div>
-                <div>高伤补偿：<input id="dmgComp" style="width:60px; background:#1e1f2e; border:1px solid #ffaa44; color:#fff;"></div>
-                <div>预判点数：<input id="predPoint" style="width:60px; background:#1e1f2e; border:1px solid #ffaa44; color:#fff;"></div>
+                <div>子弹速度：<input id="bulSpeed" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>高伤补偿：<input id="dmgComp" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>预判点数：<input id="predPoint" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
             </div>
             <button class="smBtn" onclick="addParam()">➕ 添加参数</button>
             <button class="smBtn" onclick="delParam()">➖ 删减参数</button>
-            <div style="margin-top:8px">📦 当前参数套数：<span id="pNum">0</span>/100</div>
+            <div style="margin-top:8px; color:#ffffff;">📦 当前参数套数：<span id="pNum">0</span>/100</div>
         </div>
         <!-- 功能页 -->
         <div class="tabCon" id="func" style="display:none">
-            <div class="opt"><input type="checkbox"> 长枪范围</div>
-            <div class="opt"><input type="checkbox"> 折扇范围</div>
-            <div class="opt"><input type="checkbox"> 长鞭范围</div>
-            <div class="opt"><input type="checkbox"> 桃木剑范围</div>
-            <div class="opt"><input type="checkbox"> 无后摇套装</div>
+            <div class="opt"><input type="checkbox"> <label>长枪范围</label></div>
+            <div class="opt"><input type="checkbox"> <label>折扇范围</label></div>
+            <div class="opt"><input type="checkbox"> <label>长鞭范围</label></div>
+            <div class="opt"><input type="checkbox"> <label>桃木剑范围</label></div>
+            <div class="opt"><input type="checkbox"> <label>无后摇套装</label></div>
             <div class="opt"><label>实体旋转速度</label><input type="range" min="1" max="50" value="22"></div>
-            <div class="opt"><input type="checkbox"> 杀戮光环</div>
-            <div class="opt"><input type="checkbox"> 自动闪避</div>
+            <div class="opt"><input type="checkbox"> <label>杀戮光环</label></div>
+            <div class="opt"><input type="checkbox"> <label>自动闪避</label></div>
             <div class="opt"><label>场景加速</label><input type="range" min="1" max="40" value="12"></div>
             <div class="opt"><label>视野亮度</label><input type="range" min="1" max="50" value="18"></div>
         </div>
         <!-- 绘制页 -->
         <div class="tabCon" id="draw" style="display:none">
-            <div class="opt"><input type="checkbox"> 绘制方框</div>
-            <div class="opt"><input type="checkbox"> 绘制射线</div>
-            <div class="opt"><input type="checkbox"> 绘制怪物</div>
-            <div class="opt"><input type="checkbox"> 队友标记</div>
+            <div class="opt"><input type="checkbox"> <label>绘制方框</label></div>
+            <div class="opt"><input type="checkbox"> <label>绘制射线</label></div>
+            <div class="opt"><input type="checkbox"> <label>绘制怪物</label></div>
+            <div class="opt"><input type="checkbox"> <label>队友标记</label></div>
             <div class="opt"><label>💎 回收物最低价值</label><input type="range" min="10000" max="5000000" step="10000" value="50000"></div>
         </div>
     </div>
@@ -510,7 +547,7 @@
 <!-- 格机黑屏（模拟Demo） -->
 <div class="gejiUi" id="gejiBox">
     💀 你被格机了！ 💀<br>
-    <span style="font-size:1rem;">(演示效果 无实际破坏)</span>
+    <span>(演示效果 无实际破坏)</span>
 </div>
 
 <script>
@@ -613,7 +650,6 @@
     function showGeji() {
         let gejiDiv = document.getElementById("gejiBox");
         gejiDiv.style.display = "flex";
-        // 3秒后自动关闭（仅演示，无实际破坏）
         setTimeout(() => { gejiDiv.style.display = "none"; }, 2500);
     }
 
@@ -646,19 +682,12 @@
             floatWin.style.left = "20px";
             floatWin.style.top = "70px";
         }
-        // 给静默默认参数示例
         let speedInput = document.getElementById("bulSpeed");
         if(speedInput) speedInput.value = "85";
         let compInput = document.getElementById("dmgComp");
         if(compInput) compInput.value = "72";
         let predInput = document.getElementById("predPoint");
         if(predInput) predInput.value = "93";
-    });
-
-    // 小优化 checkbox 样式正常
-    let allCheck = document.querySelectorAll('input[type="checkbox"]');
-    allCheck.forEach(cb => {
-        cb.style.accentColor = "#ffcc44";
     });
 </script>
 </body>
