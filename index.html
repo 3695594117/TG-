@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>faiwnhd初心 · 超自然力量</title>
+    <!-- 音乐播放器所需样式库 (APlayer) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
     <style>
         * {
             margin: 0;
@@ -12,7 +14,7 @@
             font-family: system-ui, 'Segoe UI', 'Microsoft Yahei', 'PingFang SC', sans-serif;
         }
 
-        /* ========= 全局背景 ========= */
+        /* ========= 全局背景：你提供的图片链接 ========= */
         body {
             min-height: 100vh;
             background: url('https://t.tutu.to/md/LVzBd') no-repeat center center fixed;
@@ -24,7 +26,7 @@
             padding: 20px;
         }
 
-        /* 遮罩层 */
+        /* 增加一层深色半透明遮罩，保证文字清晰，同时保留背景图的氛围 */
         body::before {
             content: "";
             position: fixed;
@@ -38,12 +40,13 @@
             pointer-events: none;
         }
 
+        /* 所有内容容器都在遮罩之上 */
         .page, .topLogo, .msgPop, .floatMenu, .buyFloat, .teamFloat, .gejiUi {
             position: relative;
             z-index: 2;
         }
 
-        /* 顶部Logo */
+        /* 顶部Logo优化视觉效果 - 白色系 */
         .topLogo {
             position: fixed;
             top: 18px;
@@ -53,7 +56,7 @@
             font-size: 28px;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 8px rgba(0,0,0,0.5);
+            text-shadow: 0 0 8px rgba(0,0,0,0.5), 0 0 12px #00000080;
             letter-spacing: 2px;
             z-index: 20;
             pointer-events: none;
@@ -62,21 +65,23 @@
             padding: 8px 0;
         }
 
-        /* 雪花 */
+        /* 雪花效果 */
         .snow {
             position: fixed;
             top: -15px;
             pointer-events: none;
             color: rgba(255, 255, 255, 0.85);
             z-index: 25;
+            font-weight: lighter;
             animation: snowFall linear infinite;
+            text-shadow: 0 0 2px #aaccff;
         }
         @keyframes snowFall {
             0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0.2; }
         }
 
-        /* 通用卡片样式 */
+        /* 通用卡片样式 - 磨砂玻璃质感 */
         .page {
             width: 100%;
             max-width: 550px;
@@ -84,19 +89,25 @@
             backdrop-filter: blur(12px);
             border-radius: 48px;
             padding: 2rem 1.8rem;
-            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             border: 1px solid rgba(255, 255, 255, 0.35);
+            transition: all 0.3s ease;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        .active { display: flex; }
-        .hide { display: none !important; }
+        .active {
+            display: flex;
+        }
+        .hide {
+            display: none !important;
+        }
 
-        /* 密码页 */
+        /* 密码页 - 白色字体 */
         .loginBox h2 {
             color: #ffffff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
             margin-bottom: 28px;
             font-size: 1.8rem;
         }
@@ -112,6 +123,8 @@
             font-size: 1rem;
             outline: none;
             margin-bottom: 24px;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
         }
         .loginBox input:focus {
             border-color: #ffffff;
@@ -127,13 +140,16 @@
             font-size: 1rem;
             color: #1f1a0a;
             cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px #00000040;
         }
         .loginBox button:hover {
             transform: scale(0.96);
             background: linear-gradient(120deg, #ffffff, #cccccc);
+            box-shadow: 0 0 18px rgba(255,255,255,0.6);
         }
 
-        /* 提示弹窗 */
+        /* 提示弹窗 - 白色字体 */
         .msgPop {
             position: fixed;
             inset: 0;
@@ -150,11 +166,13 @@
             border-radius: 28px;
             padding: 32px 40px;
             text-align: center;
+            backdrop-filter: blur(16px);
         }
         .msgCard p {
             color: #ffffff;
             font-size: 1.2rem;
             margin-bottom: 20px;
+            text-shadow: 0 0 2px black;
         }
         .msgCard button {
             background: #dddddd;
@@ -163,13 +181,17 @@
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
+            color: #111;
         }
 
-        /* 加载页 */
-        .loadPage { gap: 25px; }
+        /* 加载页 - 白色字体 */
+        .loadPage {
+            gap: 25px;
+        }
         .loadText {
             font-size: 1.3rem;
             color: #ffffff;
+            text-shadow: 0 0 6px rgba(0,0,0,0.5);
         }
         .proWrap {
             width: 90%;
@@ -187,12 +209,16 @@
             transition: width 0.06s linear;
         }
 
-        /* 主功能页面 */
-        .mainPage { gap: 18px; }
+        /* 主功能页面 - 白色字体 */
+        .mainPage {
+            gap: 18px;
+        }
         .mainPage h3 {
             color: #ffffff;
             margin-bottom: 10px;
             font-size: 1.6rem;
+            font-weight: 600;
+            text-shadow: 0 0 4px black;
         }
         .mainPage button {
             width: 260px;
@@ -204,10 +230,14 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: 0.2s;
         }
         .mainPage button:hover {
             background: rgba(255,255,255,0.8);
             color: #000000;
+            border-color: #ffffff;
+            transform: scale(0.97);
         }
 
         /* ========= 悬浮窗样式 - 全部白色字体 ========= */
@@ -234,6 +264,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: move;
+            user-select: none;
             color: #ffffff;
             font-weight: bold;
             border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -259,6 +290,7 @@
             font-size: 0.85rem;
             color: #dddddd;
             cursor: pointer;
+            transition: 0.1s;
         }
         .tabNav div.active {
             background: rgba(255,255,255,0.9);
@@ -279,7 +311,7 @@
             background: #bbbbbb;
             border-radius: 4px;
         }
-        /* 悬浮窗内所有文字均为白色 */
+        /* 强制悬浮窗所有文字为白色 */
         .contentBox, .contentBox * {
             color: #ffffff;
         }
@@ -327,7 +359,7 @@
             color: #ffffff;
         }
 
-        /* 购买卡密窗 */
+        /* 购买卡密窗 + 制作成员窗 */
         .buyFloat, .teamFloat {
             position: fixed;
             top: 30%;
@@ -345,6 +377,7 @@
             color: #ffffff;
             text-align: center;
             margin-bottom: 12px;
+            text-shadow: 0 0 2px black;
         }
         .buyItem, .teamItem {
             padding: 8px 0;
@@ -366,7 +399,7 @@
         .closeRed { background: #aa4444; }
         .closeBlue { background: #4488ff; }
 
-        /* 格机页面 */
+        /* 格机黑屏模拟 */
         .gejiUi {
             position: fixed;
             inset: 0;
@@ -387,6 +420,7 @@
             color: #ccc;
         }
 
+        /* 调整播放器在移动端不遮挡内容 */
         @media (max-width: 500px) {
             .floatMenu { width: 280px; left: 10px; top: 60px; }
             .buyFloat, .teamFloat { right: 10px; width: 240px; }
@@ -430,7 +464,7 @@
     <button onclick="openSuper()">🚀 启动超自然行动组</button>
 </div>
 
-<!-- 悬浮窗 -->
+<!-- ----- 悬浮窗：多功能菜单 (全白字体已适配) ----- -->
 <div class="floatMenu" id="floatWin">
     <div class="floatHead" id="dragMove">
         <span>🎯 初心·全能菜单</span>
@@ -443,14 +477,16 @@
         <div data-tab="draw">绘制</div>
     </div>
     <div class="contentBox">
+        <!-- 主页 -->
         <div class="tabCon" id="home">
             <div class="opt"><button class="smBtn" onclick="showGeji()">⚠️ 格机</button></div>
             <div class="opt"><button class="smBtn">重载配置</button></div>
-            <div style="margin-top: 18px; background: #00000066; padding: 8px; border-radius: 16px;">
+            <div style="margin-top: 18px; background: #00000066; padding: 8px; border-radius: 16px; color: #ffffff;">
                 📢 公告：永久卡用户尊享全体系石头/木猪直接送<br>
                 超自然协议已加载 ｜ 自瞄优化版
             </div>
         </div>
+        <!-- 静默页 -->
         <div class="tabCon" id="silent" style="display:none">
             <div class="opt"><input type="checkbox" id="silentToggle"> <label>静默自瞄开关</label></div>
             <div class="opt">
@@ -458,16 +494,17 @@
                 <input type="range" id="bowR" min="1" max="100" value="36">
                 <span id="bowV">36</span>
             </div>
-            <div style="margin:12px 0;">⚙️ 自定义参数(上限100套)</div>
+            <div style="margin:12px 0; color:#ffffff;">⚙️ 自定义参数(上限100套)</div>
             <div class="opt">
-                <div>子弹速度：<input id="bulSpeed" style="width:60px;"></div>
-                <div>高伤补偿：<input id="dmgComp" style="width:60px;"></div>
-                <div>预判点数：<input id="predPoint" style="width:60px;"></div>
+                <div>子弹速度：<input id="bulSpeed" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>高伤补偿：<input id="dmgComp" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>预判点数：<input id="predPoint" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
             </div>
             <button class="smBtn" onclick="addParam()">➕ 添加参数</button>
             <button class="smBtn" onclick="delParam()">➖ 删减参数</button>
-            <div style="margin-top:8px;">📦 当前参数套数：<span id="pNum">0</span>/100</div>
+            <div style="margin-top:8px; color:#ffffff;">📦 当前参数套数：<span id="pNum">0</span>/100</div>
         </div>
+        <!-- 功能页 -->
         <div class="tabCon" id="func" style="display:none">
             <div class="opt"><input type="checkbox"> <label>长枪范围</label></div>
             <div class="opt"><input type="checkbox"> <label>折扇范围</label></div>
@@ -480,6 +517,7 @@
             <div class="opt"><label>场景加速</label><input type="range" min="1" max="40" value="12"></div>
             <div class="opt"><label>视野亮度</label><input type="range" min="1" max="50" value="18"></div>
         </div>
+        <!-- 绘制页 -->
         <div class="tabCon" id="draw" style="display:none">
             <div class="opt"><input type="checkbox"> <label>绘制方框</label></div>
             <div class="opt"><input type="checkbox"> <label>绘制射线</label></div>
@@ -509,14 +547,19 @@
     <button class="closeBtn closeBlue" onclick="closeTeam()">关闭</button>
 </div>
 
-<!-- 格机黑屏 -->
+<!-- 格机黑屏（模拟Demo） -->
 <div class="gejiUi" id="gejiBox">
     💀 你被格机了！ 💀<br>
     <span>(演示效果 无实际破坏)</span>
 </div>
 
+<!-- 音乐播放器区域：使用 MetingJS + APlayer 加载《幻昼》 ID:3336901873 网易云单曲 -->
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<meting-js server="netease" type="song" id="3336901873" fixed="true" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
+
 <script>
-    // 雪花特效
+    // -------------------- 雪花特效 --------------------
     function createSnow() {
         let snow = document.createElement("div");
         snow.className = "snow";
@@ -530,7 +573,7 @@
     }
     setInterval(createSnow, 220);
 
-    // 验证密码
+    // 验证密码 (密钥: 初心NB)
     function checkPwd() {
         let pwd = document.getElementById("pwdInp").value.trim();
         if (pwd === "初心NB") {
@@ -540,7 +583,7 @@
         }
     }
 
-    // 加载进度
+    // 下一步：加载进度条
     function nextStep() {
         document.getElementById("msgModal").classList.add("hide");
         document.getElementById("page1").classList.remove("active");
@@ -592,14 +635,14 @@
         };
     });
 
-    // 爆炸弓数值
+    // 爆炸弓实时数值
     let bowRange = document.getElementById("bowR");
     let bowSpan = document.getElementById("bowV");
     if (bowRange) {
         bowRange.oninput = () => { bowSpan.innerText = bowRange.value; };
     }
 
-    // 参数逻辑
+    // 自定义参数逻辑 (演示)
     let paramCount = 0;
     function addParam() {
         if (paramCount >= 100) { alert("已达到100套参数上限！"); return; }
@@ -611,7 +654,7 @@
         document.getElementById("pNum").innerText = paramCount;
     }
 
-    // 格机效果
+    // 格机效果（纯展示）
     function showGeji() {
         let gejiDiv = document.getElementById("gejiBox");
         gejiDiv.style.display = "flex";
@@ -641,7 +684,7 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
-    // 初始化
+    // 悬浮窗初始位置修正
     window.addEventListener("load", () => {
         if(floatWin) {
             floatWin.style.left = "20px";
