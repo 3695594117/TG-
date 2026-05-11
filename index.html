@@ -74,7 +74,7 @@
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0.2; }
         }
 
-        /* 通用卡片样式 */
+        /* 通用卡片样式 - 原UI */
         .page {
             width: 100%;
             max-width: 550px;
@@ -208,7 +208,7 @@
             color: #000000;
         }
 
-        /* 功能悬浮窗样式 */
+        /* 功能悬浮窗 - 原白色UI */
         .floatMenu {
             position: fixed;
             top: 70px;
@@ -270,13 +270,8 @@
             font-size: 0.85rem;
             color: #ffffff;
         }
-        .contentBox::-webkit-scrollbar {
-            width: 4px;
-        }
-        .contentBox::-webkit-scrollbar-thumb {
-            background: #bbbbbb;
-            border-radius: 4px;
-        }
+        .contentBox::-webkit-scrollbar { width: 4px; }
+        .contentBox::-webkit-scrollbar-thumb { background: #bbbbbb; border-radius: 4px; }
         .contentBox, .contentBox * { color: #ffffff; }
         .opt {
             margin: 12px 0;
@@ -297,7 +292,6 @@
             cursor: pointer;
             color: #000000;
         }
-        .smBtn:hover { background: #ffffff; }
         .contentBox input[type="text"] {
             background: #2a2e42;
             border: 1px solid #aaa;
@@ -325,11 +319,7 @@
             border: 2px solid rgba(255,255,255,0.6);
             display: none;
         }
-        .buyFloat h4, .teamFloat h4 {
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 12px;
-        }
+        .buyFloat h4, .teamFloat h4 { color: #ffffff; text-align: center; margin-bottom: 12px; }
         .buyItem, .teamItem {
             padding: 8px 0;
             border-bottom: 1px solid #4a4f6e;
@@ -350,7 +340,7 @@
         .closeRed { background: #aa4444; }
         .closeBlue { background: #4488ff; }
 
-        /* 格机页面 */
+        /* 格机黑屏 */
         .gejiUi {
             position: fixed;
             inset: 0;
@@ -368,41 +358,42 @@
         }
         .gejiUi span { font-size: 1rem; color: #ccc; }
 
-        /* ========= 自定义可拖动音乐播放器 ========= */
+        /* ========= 可拖动迷你音乐播放器（保持原UI风格） ========= */
         .custom-player {
             position: fixed;
             bottom: 30px;
             right: 20px;
-            width: 300px;
-            background: rgba(20, 24, 40, 0.96);
+            width: 280px;
+            background: rgba(10, 15, 28, 0.92);
             backdrop-filter: blur(16px);
             border-radius: 16px;
-            border: 2px solid #ffd300;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
             z-index: 10050;
             overflow: hidden;
             cursor: move;
             transition: none;
         }
         .player-header {
-            background: #ffd300;
+            background: rgba(30, 35, 55, 0.95);
             padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: move;
             user-select: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            color: #1a1a2a;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
         .player-body {
-            padding: 12px;
+            padding: 10px 12px;
         }
         .song-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #ffd300;
+            color: #ffffff;
             margin-bottom: 8px;
             text-align: center;
         }
@@ -411,53 +402,48 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            margin: 12px 0;
+            margin: 8px 0;
         }
         .ctrl-btn {
             background: rgba(255,255,255,0.15);
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             color: white;
             transition: 0.1s;
         }
-        .ctrl-btn:hover {
-            background: #ffd300;
-            color: #1a1a2a;
-        }
+        .ctrl-btn:active { transform: scale(0.95); }
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 3px;
             background: rgba(255,255,255,0.2);
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
-            margin: 10px 0;
-            position: relative;
+            margin: 8px 0;
         }
         .progress-fill {
             width: 0%;
             height: 100%;
-            background: #ffd300;
-            border-radius: 4px;
-            position: relative;
+            background: #ffffff;
+            border-radius: 3px;
         }
         .time-info {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 10px;
             color: #aaa;
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .volume-slider {
-            width: 100%;
-            margin-top: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
+            margin-top: 8px;
         }
+        .volume-slider span { font-size: 11px; color: #ccc; }
         .volume-slider input {
             flex: 1;
             height: 3px;
@@ -469,7 +455,7 @@
             -webkit-appearance: none;
             width: 10px;
             height: 10px;
-            background: #ffd300;
+            background: #ffffff;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -477,16 +463,15 @@
             background: #aa3333;
             border: none;
             color: white;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
         }
         @media (max-width: 500px) {
-            .custom-player { width: 270px; bottom: 20px; right: 10px; }
+            .custom-player { width: 260px; bottom: 20px; right: 10px; }
             .floatMenu { width: 280px; left: 10px; top: 60px; }
-            .buyFloat, .teamFloat { right: 10px; width: 240px; }
         }
     </style>
 </head>
@@ -612,18 +597,16 @@
     <span>(演示效果 无实际破坏)</span>
 </div>
 
-<!-- ========= 自定义可拖动音乐播放器 ========= -->
+<!-- ========= 可拖动迷你音乐播放器（幻昼 ID:3336901873） ========= -->
 <div class="custom-player" id="musicPlayer">
     <div class="player-header" id="playerDragHandle">
         <span>🎵 幻昼 · 初心推荐</span>
         <button class="close-player" onclick="closeMusicPlayer()">✖</button>
     </div>
     <div class="player-body">
-        <div class="song-title" id="songTitle">幻昼 - 初心推荐</div>
+        <div class="song-title">幻昼 - Illusion</div>
         <div class="controls">
-            <button class="ctrl-btn" id="prevBtn" style="display:none;">⏮</button>
             <button class="ctrl-btn" id="playPauseBtn">▶</button>
-            <button class="ctrl-btn" id="nextBtn" style="display:none;">⏭</button>
         </div>
         <div class="progress-bar" id="progressBar">
             <div class="progress-fill" id="progressFill"></div>
@@ -640,7 +623,7 @@
 </div>
 
 <script>
-    // ---------- 自定义音乐播放器（真正可拖动）----------
+    // ---------- 可拖动音乐播放器 ----------
     const player = document.getElementById('musicPlayer');
     const dragHandle = document.getElementById('playerDragHandle');
     const playPauseBtn = document.getElementById('playPauseBtn');
@@ -649,17 +632,14 @@
     const currentTimeSpan = document.getElementById('currentTime');
     const durationSpan = document.getElementById('duration');
     const volumeControl = document.getElementById('volumeControl');
-    const songTitleSpan = document.getElementById('songTitle');
     
     let audio = null;
-    let isDraggingPlayer = false;
-    let playerStartX, playerStartY, playerStartLeft, playerStartTop;
+    let isDragging = false;
+    let startX, startY, startLeft, startTop;
     
-    // 初始化音频（幻昼 ID:3336901873）
     function initAudio() {
         audio = new Audio('https://music.163.com/song/media/outer/url?id=3336901873.mp3');
         audio.volume = volumeControl.value / 100;
-        
         audio.addEventListener('timeupdate', updateProgress);
         audio.addEventListener('loadedmetadata', () => {
             durationSpan.textContent = formatTime(audio.duration);
@@ -677,7 +657,7 @@
     }
     
     function updateProgress() {
-        if (audio && !isDraggingPlayer) {
+        if (audio && !isDragging) {
             const percent = (audio.currentTime / audio.duration) * 100;
             progressFill.style.width = percent + '%';
             currentTimeSpan.textContent = formatTime(audio.currentTime);
@@ -697,7 +677,6 @@
     
     playPauseBtn.addEventListener('click', playPause);
     
-    // 进度条点击
     progressBar.addEventListener('click', (e) => {
         if (!audio) return;
         const rect = progressBar.getBoundingClientRect();
@@ -705,27 +684,26 @@
         audio.currentTime = percent * audio.duration;
     });
     
-    // 音量控制
     volumeControl.addEventListener('input', (e) => {
         if (audio) audio.volume = e.target.value / 100;
     });
     
-    // 播放器拖拽
+    // 鼠标拖拽
     dragHandle.addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('close-player')) return;
-        isDraggingPlayer = true;
-        playerStartX = e.clientX;
-        playerStartY = e.clientY;
-        playerStartLeft = player.offsetLeft;
-        playerStartTop = player.offsetTop;
+        if (e.target.classList && e.target.classList.contains('close-player')) return;
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = player.offsetLeft;
+        startTop = player.offsetTop;
         player.style.cursor = 'grabbing';
         e.preventDefault();
     });
     
     document.addEventListener('mousemove', (e) => {
-        if (!isDraggingPlayer) return;
-        let newLeft = playerStartLeft + (e.clientX - playerStartX);
-        let newTop = playerStartTop + (e.clientY - playerStartY);
+        if (!isDragging) return;
+        let newLeft = startLeft + (e.clientX - startX);
+        let newTop = startTop + (e.clientY - startY);
         newLeft = Math.min(window.innerWidth - player.offsetWidth - 10, Math.max(10, newLeft));
         newTop = Math.min(window.innerHeight - 100, Math.max(20, newTop));
         player.style.left = newLeft + 'px';
@@ -735,28 +713,28 @@
     });
     
     document.addEventListener('mouseup', () => {
-        isDraggingPlayer = false;
+        isDragging = false;
         player.style.cursor = '';
     });
     
-    // 触摸事件（手机端支持）
+    // 手机触摸拖拽
     dragHandle.addEventListener('touchstart', (e) => {
         if (e.target.classList && e.target.classList.contains('close-player')) return;
         e.preventDefault();
         const touch = e.touches[0];
-        isDraggingPlayer = true;
-        playerStartX = touch.clientX;
-        playerStartY = touch.clientY;
-        playerStartLeft = player.offsetLeft;
-        playerStartTop = player.offsetTop;
+        isDragging = true;
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startLeft = player.offsetLeft;
+        startTop = player.offsetTop;
     });
     
     document.addEventListener('touchmove', (e) => {
-        if (!isDraggingPlayer) return;
+        if (!isDragging) return;
         e.preventDefault();
         const touch = e.touches[0];
-        let newLeft = playerStartLeft + (touch.clientX - playerStartX);
-        let newTop = playerStartTop + (touch.clientY - playerStartY);
+        let newLeft = startLeft + (touch.clientX - startX);
+        let newTop = startTop + (touch.clientY - startY);
         newLeft = Math.min(window.innerWidth - player.offsetWidth - 10, Math.max(10, newLeft));
         newTop = Math.min(window.innerHeight - 100, Math.max(20, newTop));
         player.style.left = newLeft + 'px';
@@ -766,17 +744,14 @@
     });
     
     document.addEventListener('touchend', () => {
-        isDraggingPlayer = false;
+        isDragging = false;
     });
     
     function closeMusicPlayer() {
-        if (audio) {
-            audio.pause();
-        }
+        if (audio) audio.pause();
         player.style.display = 'none';
     }
     
-    // 初始化播放器
     initAudio();
     
     // 雪花特效
