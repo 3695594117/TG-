@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>faiwnhd初心 · 超自然力量</title>
-    <!-- 音乐播放器样式库 (APlayer) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
     <style>
         * {
             margin: 0;
@@ -360,35 +358,34 @@
         }
         .gejiUi span { font-size: 1rem; color: #ccc; }
 
-        /* ========= 音乐播放器 - 可拖拽版本（保持原来 meting-js 外观） ========= */
-        /* 让 APlayer 固定播放器变得可拖动 */
-        .aplayer.aplayer-fixed {
-            position: fixed !important;
-            bottom: auto !important;
-            right: auto !important;
-            top: 100px !important;
-            left: 20px !important;
-            width: 320px !important;
+        /* ========= 可拖拽音乐播放器容器 ========= */
+        .drag-player-container {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            width: 320px;
+            z-index: 10050;
+            cursor: move;
+        }
+        /* 让 meting-js 生成的播放器在容器内正常显示 */
+        .drag-player-container .aplayer {
+            margin: 0 !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4) !important;
+            border: 2px solid #ffd300 !important;
+            border-radius: 12px !important;
             background: rgba(10, 12, 26, 0.96) !important;
             backdrop-filter: blur(16px) !important;
-            border-radius: 12px !important;
-            border: 2px solid #ffd300 !important;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4) !important;
-            z-index: 10050 !important;
-            cursor: move;
-            transition: none !important;
         }
-        .aplayer.aplayer-fixed .aplayer-lrc { display: none !important; }
-        .aplayer.aplayer-fixed .aplayer-info .aplayer-music .aplayer-title { color: #ffd300 !important; }
-        .aplayer.aplayer-fixed .aplayer-info .aplayer-music .aplayer-author { color: #cccccc !important; }
-        .aplayer.aplayer-fixed .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played { background: #ffd300 !important; }
+        .drag-player-container .aplayer .aplayer-lrc { display: none !important; }
+        .drag-player-container .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #ffd300 !important; }
         
         @media (max-width: 500px) {
+            .drag-player-container { width: 280px; bottom: 20px; right: 10px; }
             .floatMenu { width: 280px; left: 10px; top: 60px; }
-            .buyFloat, .teamFloat { right: 10px; width: 240px; }
-            .aplayer.aplayer-fixed { width: 280px !important; left: 10px !important; top: 80px !important; }
         }
     </style>
+    <!-- 音乐播放器样式库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 </head>
 <body>
 
@@ -512,10 +509,13 @@
     <span>(演示效果 无实际破坏)</span>
 </div>
 
-<!-- 音乐播放器：使用 meting-js，外观和原来一样，但可以拖拽 -->
+<!-- ========= 可拖拽音乐播放器（用容器包裹 meting-js） ========= -->
+<div id="dragPlayerContainer" class="drag-player-container">
+    <meting-js server="netease" type="song" id="3336901873" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-<meting-js server="netease" type="song" id="3336901873" fixed="true" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
 
 <script>
     // 雪花特效
@@ -614,6 +614,7 @@
         setTimeout(() => { gejiDiv.style.display = "none"; }, 2500);
     }
 
+    // 功能悬浮窗拖动
     let dragItem = document.getElementById("dragMove");
     let dragActive = false, offsetX, offsetY;
     dragItem.addEventListener("mousedown", (e) => {
@@ -636,76 +637,75 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
-    // ========= 让音乐播放器可以拖拽 =========
-    function initPlayerDrag() {
-        const player = document.querySelector('.aplayer-fixed');
-        if (!player) {
-            setTimeout(initPlayerDrag, 200);
+    // ========= 音乐播放器容器拖拽（可靠版本） =========
+    const playerContainer = document.getElementById('dragPlayerContainer');
+    let isDraggingPlayer = false;
+    let startMouseX, startMouseY, startContainerLeft, startContainerTop;
+    
+    // 鼠标拖拽
+    playerContainer.addEventListener('mousedown', (e) => {
+        // 如果点到播放器内部的按钮，不触发拖拽
+        if (e.target.closest('.aplayer-play') || 
+            e.target.closest('.aplayer-icon') || 
+            e.target.closest('.aplayer-volume-bar-wrap') ||
+            e.target.closest('.aplayer-bar')) {
             return;
         }
-        
-        let isDrag = false;
-        let startX, startY, startLeft, startTop;
-        
-        player.style.position = 'fixed';
-        player.style.top = '100px';
-        player.style.left = '20px';
-        player.style.cursor = 'move';
-        
-        player.addEventListener('mousedown', (e) => {
-            if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon') || e.target.closest('.aplayer-volume-bar-wrap')) {
-                return;
-            }
-            isDrag = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startLeft = player.offsetLeft;
-            startTop = player.offsetTop;
-            e.preventDefault();
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (!isDrag) return;
-            let newLeft = startLeft + (e.clientX - startX);
-            let newTop = startTop + (e.clientY - startY);
-            newLeft = Math.min(window.innerWidth - player.offsetWidth - 10, Math.max(10, newLeft));
-            newTop = Math.min(window.innerHeight - 80, Math.max(20, newTop));
-            player.style.left = newLeft + 'px';
-            player.style.top = newTop + 'px';
-        });
-        
-        document.addEventListener('mouseup', () => {
-            isDrag = false;
-        });
-        
-        // 手机触摸
-        player.addEventListener('touchstart', (e) => {
-            if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon')) return;
-            const touch = e.touches[0];
-            isDrag = true;
-            startX = touch.clientX;
-            startY = touch.clientY;
-            startLeft = player.offsetLeft;
-            startTop = player.offsetTop;
-            e.preventDefault();
-        });
-        
-        document.addEventListener('touchmove', (e) => {
-            if (!isDrag) return;
-            const touch = e.touches[0];
-            let newLeft = startLeft + (touch.clientX - startX);
-            let newTop = startTop + (touch.clientY - startY);
-            newLeft = Math.min(window.innerWidth - player.offsetWidth - 10, Math.max(10, newLeft));
-            newTop = Math.min(window.innerHeight - 80, Math.max(20, newTop));
-            player.style.left = newLeft + 'px';
-            player.style.top = newTop + 'px';
-        });
-        
-        document.addEventListener('touchend', () => {
-            isDrag = false;
-        });
-    }
+        isDraggingPlayer = true;
+        startMouseX = e.clientX;
+        startMouseY = e.clientY;
+        startContainerLeft = playerContainer.offsetLeft;
+        startContainerTop = playerContainer.offsetTop;
+        playerContainer.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
     
+    document.addEventListener('mousemove', (e) => {
+        if (!isDraggingPlayer) return;
+        let newLeft = startContainerLeft + (e.clientX - startMouseX);
+        let newTop = startContainerTop + (e.clientY - startMouseY);
+        newLeft = Math.min(window.innerWidth - playerContainer.offsetWidth - 10, Math.max(10, newLeft));
+        newTop = Math.min(window.innerHeight - 100, Math.max(20, newTop));
+        playerContainer.style.left = newLeft + 'px';
+        playerContainer.style.top = newTop + 'px';
+        playerContainer.style.bottom = 'auto';
+        playerContainer.style.right = 'auto';
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDraggingPlayer = false;
+        playerContainer.style.cursor = '';
+    });
+    
+    // 手机触摸拖拽
+    playerContainer.addEventListener('touchstart', (e) => {
+        if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon')) return;
+        const touch = e.touches[0];
+        isDraggingPlayer = true;
+        startMouseX = touch.clientX;
+        startMouseY = touch.clientY;
+        startContainerLeft = playerContainer.offsetLeft;
+        startContainerTop = playerContainer.offsetTop;
+        e.preventDefault();
+    });
+    
+    document.addEventListener('touchmove', (e) => {
+        if (!isDraggingPlayer) return;
+        const touch = e.touches[0];
+        let newLeft = startContainerLeft + (touch.clientX - startMouseX);
+        let newTop = startContainerTop + (touch.clientY - startMouseY);
+        newLeft = Math.min(window.innerWidth - playerContainer.offsetWidth - 10, Math.max(10, newLeft));
+        newTop = Math.min(window.innerHeight - 100, Math.max(20, newTop));
+        playerContainer.style.left = newLeft + 'px';
+        playerContainer.style.top = newTop + 'px';
+        playerContainer.style.bottom = 'auto';
+        playerContainer.style.right = 'auto';
+    });
+    
+    document.addEventListener('touchend', () => {
+        isDraggingPlayer = false;
+    });
+
     window.addEventListener("load", () => {
         if(floatWin) {
             floatWin.style.left = "20px";
@@ -718,7 +718,12 @@
         let predInput = document.getElementById("predPoint");
         if(predInput) predInput.value = "93";
         
-        initPlayerDrag();
+        // 设置播放器容器初始位置
+        playerContainer.style.position = 'fixed';
+        playerContainer.style.bottom = '30px';
+        playerContainer.style.right = '20px';
+        playerContainer.style.left = 'auto';
+        playerContainer.style.top = 'auto';
     });
 </script>
 </body>
