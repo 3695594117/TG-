@@ -37,7 +37,7 @@
             pointer-events: none;
         }
 
-        .page, .topLogo, .msgPop, .floatMenu, .buyFloat, .teamFloat, .gejiUi, .musicPlayer {
+        .page, .topLogo, .msgPop, .floatMenu, .buyFloat, .teamFloat, .gejiUi, .musicPlayer, .searchMusicWin {
             position: relative;
             z-index: 2;
         }
@@ -208,7 +208,7 @@
             color: #000000;
         }
 
-        /* 悬浮窗样式 */
+        /* 功能悬浮窗样式 */
         .floatMenu {
             position: fixed;
             top: 70px;
@@ -386,7 +386,7 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 320px;
+            width: 340px;
             background: rgba(10, 12, 26, 0.92);
             backdrop-filter: blur(16px);
             border-radius: 16px;
@@ -421,6 +421,17 @@
             cursor: pointer;
             font-size: 12px;
         }
+        .searchMusicBtn {
+            background: #ffaa33;
+            border: none;
+            color: #1a1a2a;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 8px;
+        }
         .aplayer-container {
             background: transparent !important;
         }
@@ -432,25 +443,131 @@
         .musicPlayer .aplayer .aplayer-info {
             background: rgba(0,0,0,0.3) !important;
         }
-        .musicPlayer .aplayer .aplayer-pic {
-            border-radius: 8px !important;
-        }
-        /* 调整播放器内部文字颜色 */
         .aplayer .aplayer-info .aplayer-music .aplayer-title {
             color: #ffdd88 !important;
         }
         .aplayer .aplayer-info .aplayer-music .aplayer-author {
             color: #cccccc !important;
         }
-        .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-loaded,
         .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
             background: #ffd300 !important;
+        }
+
+        /* ========= 音乐搜索悬浮窗 ========= */
+        .searchMusicWin {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            max-width: 90%;
+            background: rgba(16, 20, 32, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 2px solid rgba(255, 221, 0, 0.9);
+            z-index: 10060;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .searchHeader {
+            background: rgba(255, 221, 0, 0.9);
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            color: #1a1a2a;
+            font-weight: bold;
+        }
+        .searchContent {
+            padding: 18px;
+        }
+        .searchInputArea {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .searchInputArea input {
+            flex: 1;
+            padding: 10px 14px;
+            background: #0b0e1a;
+            border: 1px solid #ffd966;
+            border-radius: 40px;
+            color: white;
+            outline: none;
+        }
+        .searchInputArea button {
+            background: #ffd300;
+            border: none;
+            padding: 0 18px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #1a1a2a;
+        }
+        .searchResultList {
+            max-height: 320px;
+            overflow-y: auto;
+        }
+        .searchResultItem {
+            background: rgba(25, 30, 45, 0.7);
+            margin-bottom: 8px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .searchResultItem:hover {
+            background: #ffd30030;
+            border-color: #ffd300;
+        }
+        .songInfo {
+            flex: 1;
+            color: #f0f0f0;
+        }
+        .songName {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .songArtist {
+            font-size: 11px;
+            color: #ccccaa;
+        }
+        .playIcon {
+            background: #ffd300;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #1a1a2a;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .closeSearchBtn {
+            background: #aa3333;
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         @media (max-width: 500px) {
             .floatMenu { width: 280px; left: 10px; top: 60px; }
             .buyFloat, .teamFloat { right: 10px; width: 240px; }
-            .musicPlayer { width: 280px; bottom: 20px; right: 20px; }
+            .musicPlayer { width: 300px; bottom: 20px; right: 20px; }
+            .searchMusicWin { width: 340px; }
         }
     </style>
     <!-- 音乐播放器核心库 -->
@@ -578,41 +695,196 @@
     <span>(演示效果 无实际破坏)</span>
 </div>
 
-<!-- ========= 可拖拽音乐播放器悬浮窗 ========= -->
+<!-- ========= 可拖拽音乐播放器悬浮窗（带搜索按钮） ========= -->
 <div class="musicPlayer" id="musicPlayer">
     <div class="playerHeader" id="playerDrag">
-        <span>🎵 幻昼 · 初心推荐</span>
+        <span>🎵 幻昼 · 初心推荐 <button class="searchMusicBtn" onclick="openSearchMusic()">🔍 搜歌</button></span>
         <button class="closePlayerBtn" onclick="closeMusicPlayer()">✖</button>
     </div>
     <div id="aplayerContainer"></div>
 </div>
 
+<!-- ========= 音乐搜索悬浮窗（可拖拽） ========= -->
+<div class="searchMusicWin" id="searchWin">
+    <div class="searchHeader" id="searchDrag">
+        <span>🎧 搜索网易云音乐</span>
+        <button class="closeSearchBtn" onclick="closeSearchWin()">✖</button>
+    </div>
+    <div class="searchContent">
+        <div class="searchInputArea">
+            <input type="text" id="searchKeyword" placeholder="输入歌名/歌手..." autocomplete="off">
+            <button onclick="searchSong()">搜索</button>
+        </div>
+        <div id="searchResults" class="searchResultList">
+            <div style="text-align:center;color:#aaa;padding:20px;">输入关键词后点击搜索</div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script>
-    // 初始化音乐播放器
+    // ---------- 音乐播放器 ----------
+    let currentAudio = {
+        name: '幻昼',
+        artist: '初心推荐',
+        url: 'https://music.163.com/song/media/outer/url?id=3336901873.mp3',
+        cover: 'https://picsum.photos/200/200?random=1'
+    };
+    
     const ap = new APlayer({
         container: document.getElementById('aplayerContainer'),
         fixed: false,
         autoplay: false,
         theme: '#ffd300',
-        audio: [{
-            name: '幻昼',
-            artist: '初心推荐',
-            url: 'https://music.163.com/song/media/outer/url?id=3336901873.mp3',
-            cover: 'https://picsum.photos/200/200?random=1'
-        }]
+        audio: [currentAudio]
     });
 
+    // 更新播放器歌曲
+    function updatePlayer(songName, artist, songUrl) {
+        ap.list.clear();
+        ap.list.add({
+            name: songName,
+            artist: artist || '初心推荐',
+            url: songUrl,
+            cover: 'https://picsum.photos/200/200?random=' + Date.now()
+        });
+        ap.play();
+    }
+
+    // ---------- 音乐搜索功能（通过网易云API转发）----------
+    // 使用免费的网易云音乐搜索接口 (跨域可用)
+    async function searchSong() {
+        const keyword = document.getElementById('searchKeyword').value.trim();
+        if (!keyword) {
+            alert('请输入歌曲名或歌手');
+            return;
+        }
+        const resultsDiv = document.getElementById('searchResults');
+        resultsDiv.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;">🔍 搜索中...</div>';
+        
+        try {
+            // 使用第三方网易云音乐搜索代理API (稳定且支持CORS)
+            const apiUrl = `https://api.uomg.com/api/search?key=${encodeURIComponent(keyword)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            if (data.code === 200 && data.data && data.data.length > 0) {
+                renderSearchResults(data.data);
+            } else {
+                resultsDiv.innerHTML = '<div style="text-align:center;color:#ffaa66;padding:20px;">😢 没有找到相关歌曲</div>';
+            }
+        } catch (err) {
+            console.error(err);
+            resultsDiv.innerHTML = '<div style="text-align:center;color:#ff8866;padding:20px;">❌ 搜索失败，请稍后重试</div>';
+        }
+    }
+    
+    function renderSearchResults(songs) {
+        const resultsDiv = document.getElementById('searchResults');
+        resultsDiv.innerHTML = '';
+        songs.slice(0, 18).forEach(song => {
+            const item = document.createElement('div');
+            item.className = 'searchResultItem';
+            const songName = song.name || '未知歌曲';
+            const artist = song.artist || (song.singer ? song.singer : '未知歌手');
+            const songId = song.rid || song.id;
+            
+            item.innerHTML = `
+                <div class="songInfo">
+                    <div class="songName">${escapeHtml(songName)}</div>
+                    <div class="songArtist">${escapeHtml(artist)}</div>
+                </div>
+                <div class="playIcon" data-id="${songId}" data-name="${escapeHtml(songName)}" data-artist="${escapeHtml(artist)}">▶</div>
+            `;
+            resultsDiv.appendChild(item);
+        });
+        
+        // 绑定播放事件
+        document.querySelectorAll('.playIcon').forEach(icon => {
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const songId = icon.getAttribute('data-id');
+                const songName = icon.getAttribute('data-name');
+                const songArtist = icon.getAttribute('data-artist');
+                if (songId) {
+                    const playUrl = `https://music.163.com/song/media/outer/url?id=${songId}.mp3`;
+                    updatePlayer(songName, songArtist, playUrl);
+                    closeSearchWin();
+                } else {
+                    alert('无法获取播放链接');
+                }
+            });
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // 搜索窗口拖拽
+    let searchWin = document.getElementById('searchWin');
+    let searchDrag = document.getElementById('searchDrag');
+    let isDragSearch = false, sOffX, sOffY;
+    
+    if (searchDrag) {
+        searchDrag.addEventListener('mousedown', (e) => {
+            if (e.target.classList && e.target.classList.contains('closeSearchBtn')) return;
+            isDragSearch = true;
+            sOffX = e.clientX - searchWin.offsetLeft;
+            sOffY = e.clientY - searchWin.offsetTop;
+            searchWin.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+    }
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragSearch) return;
+        let leftVal = e.clientX - sOffX;
+        let topVal = e.clientY - sOffY;
+        leftVal = Math.min(window.innerWidth - searchWin.offsetWidth - 10, Math.max(10, leftVal));
+        topVal = Math.min(window.innerHeight - 150, Math.max(30, topVal));
+        searchWin.style.left = leftVal + 'px';
+        searchWin.style.top = topVal + 'px';
+        searchWin.style.transform = 'none';
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isDragSearch = false;
+        if (searchWin) searchWin.style.cursor = '';
+    });
+    
+    function openSearchMusic() {
+        searchWin.style.display = 'flex';
+        searchWin.style.left = '50%';
+        searchWin.style.top = '100px';
+        searchWin.style.transform = 'translateX(-50%)';
+        document.getElementById('searchKeyword').value = '';
+        document.getElementById('searchResults').innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;">输入关键词后点击搜索</div>';
+    }
+    
+    function closeSearchWin() {
+        searchWin.style.display = 'none';
+    }
+    
     // 音乐播放器拖拽
     let musicPlayer = document.getElementById('musicPlayer');
     let playerDrag = document.getElementById('playerDrag');
     let dragActive2 = false, offsetX2, offsetY2;
     
     playerDrag.addEventListener('mousedown', (e) => {
+        if (e.target.classList && e.target.classList.contains('closePlayerBtn')) return;
+        if (e.target.classList && e.target.classList.contains('searchMusicBtn')) return;
         dragActive2 = true;
         offsetX2 = e.clientX - musicPlayer.offsetLeft;
         offsetY2 = e.clientY - musicPlayer.offsetTop;
         musicPlayer.style.cursor = 'grabbing';
+        e.preventDefault();
     });
     
     document.addEventListener('mousemove', (e) => {
@@ -635,9 +907,6 @@
     function closeMusicPlayer() {
         musicPlayer.style.display = 'none';
     }
-    
-    // 如果用户想重新显示（可以在功能菜单加个按钮，但保留关闭功能）
-    window.musicPlayer = musicPlayer;
     
     // 雪花特效
     function createSnow() {
