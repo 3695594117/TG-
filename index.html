@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>faiwnhd初心 · 超自然力量</title>
+    <!-- 音乐播放器所需样式库 (APlayer) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
     <style>
         * {
             margin: 0;
@@ -12,7 +14,7 @@
             font-family: system-ui, 'Segoe UI', 'Microsoft Yahei', 'PingFang SC', sans-serif;
         }
 
-        /* ========= 全局背景 ========= */
+        /* ========= 全局背景：你提供的图片链接 ========= */
         body {
             min-height: 100vh;
             background: url('https://t.tutu.to/md/LVzBd') no-repeat center center fixed;
@@ -24,6 +26,7 @@
             padding: 20px;
         }
 
+        /* 增加一层深色半透明遮罩，保证文字清晰，同时保留背景图的氛围 */
         body::before {
             content: "";
             position: fixed;
@@ -37,11 +40,13 @@
             pointer-events: none;
         }
 
-        .page, .topLogo, .msgPop, .floatMenu, .buyFloat, .teamFloat, .gejiUi, .musicPlayer, .searchMusicWin {
+        /* 所有内容容器都在遮罩之上 */
+        .page, .topLogo, .msgPop, .floatMenu, .buyFloat, .teamFloat, .gejiUi, .aplayer {
             position: relative;
             z-index: 2;
         }
 
+        /* 顶部Logo优化视觉效果 - 白色系 */
         .topLogo {
             position: fixed;
             top: 18px;
@@ -51,7 +56,7 @@
             font-size: 28px;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 8px rgba(0,0,0,0.5);
+            text-shadow: 0 0 8px rgba(0,0,0,0.5), 0 0 12px #00000080;
             letter-spacing: 2px;
             z-index: 20;
             pointer-events: none;
@@ -60,21 +65,23 @@
             padding: 8px 0;
         }
 
-        /* 雪花 */
+        /* 雪花效果 */
         .snow {
             position: fixed;
             top: -15px;
             pointer-events: none;
             color: rgba(255, 255, 255, 0.85);
             z-index: 25;
+            font-weight: lighter;
             animation: snowFall linear infinite;
+            text-shadow: 0 0 2px #aaccff;
         }
         @keyframes snowFall {
             0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0.2; }
         }
 
-        /* 通用卡片样式 */
+        /* 通用卡片样式 - 磨砂玻璃质感 */
         .page {
             width: 100%;
             max-width: 550px;
@@ -82,19 +89,25 @@
             backdrop-filter: blur(12px);
             border-radius: 48px;
             padding: 2rem 1.8rem;
-            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
             border: 1px solid rgba(255, 255, 255, 0.35);
+            transition: all 0.3s ease;
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-        .active { display: flex; }
-        .hide { display: none !important; }
+        .active {
+            display: flex;
+        }
+        .hide {
+            display: none !important;
+        }
 
-        /* 密码页 */
+        /* 密码页 - 白色字体 */
         .loginBox h2 {
             color: #ffffff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
             margin-bottom: 28px;
             font-size: 1.8rem;
         }
@@ -110,6 +123,8 @@
             font-size: 1rem;
             outline: none;
             margin-bottom: 24px;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
         }
         .loginBox input:focus {
             border-color: #ffffff;
@@ -125,13 +140,16 @@
             font-size: 1rem;
             color: #1f1a0a;
             cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px #00000040;
         }
         .loginBox button:hover {
             transform: scale(0.96);
             background: linear-gradient(120deg, #ffffff, #cccccc);
+            box-shadow: 0 0 18px rgba(255,255,255,0.6);
         }
 
-        /* 提示弹窗 */
+        /* 提示弹窗 - 白色字体 */
         .msgPop {
             position: fixed;
             inset: 0;
@@ -148,11 +166,13 @@
             border-radius: 28px;
             padding: 32px 40px;
             text-align: center;
+            backdrop-filter: blur(16px);
         }
         .msgCard p {
             color: #ffffff;
             font-size: 1.2rem;
             margin-bottom: 20px;
+            text-shadow: 0 0 2px black;
         }
         .msgCard button {
             background: #dddddd;
@@ -161,13 +181,17 @@
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
+            color: #111;
         }
 
-        /* 加载页 */
-        .loadPage { gap: 25px; }
+        /* 加载页 - 白色字体 */
+        .loadPage {
+            gap: 25px;
+        }
         .loadText {
             font-size: 1.3rem;
             color: #ffffff;
+            text-shadow: 0 0 6px rgba(0,0,0,0.5);
         }
         .proWrap {
             width: 90%;
@@ -185,12 +209,16 @@
             transition: width 0.06s linear;
         }
 
-        /* 主功能页面 */
-        .mainPage { gap: 18px; }
+        /* 主功能页面 - 白色字体 */
+        .mainPage {
+            gap: 18px;
+        }
         .mainPage h3 {
             color: #ffffff;
             margin-bottom: 10px;
             font-size: 1.6rem;
+            font-weight: 600;
+            text-shadow: 0 0 4px black;
         }
         .mainPage button {
             width: 260px;
@@ -202,13 +230,17 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: 0.2s;
         }
         .mainPage button:hover {
             background: rgba(255,255,255,0.8);
             color: #000000;
+            border-color: #ffffff;
+            transform: scale(0.97);
         }
 
-        /* 功能悬浮窗样式 */
+        /* ========= 悬浮窗样式 - 全部白色字体 ========= */
         .floatMenu {
             position: fixed;
             top: 70px;
@@ -232,6 +264,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: move;
+            user-select: none;
             color: #ffffff;
             font-weight: bold;
             border-bottom: 1px solid rgba(255,255,255,0.3);
@@ -257,6 +290,7 @@
             font-size: 0.85rem;
             color: #dddddd;
             cursor: pointer;
+            transition: 0.1s;
         }
         .tabNav div.active {
             background: rgba(255,255,255,0.9);
@@ -277,6 +311,7 @@
             background: #bbbbbb;
             border-radius: 4px;
         }
+        /* 强制悬浮窗所有文字为白色 */
         .contentBox, .contentBox * {
             color: #ffffff;
         }
@@ -320,8 +355,11 @@
             transform: scale(1.05);
             margin-right: 6px;
         }
+        .contentBox div {
+            color: #ffffff;
+        }
 
-        /* 购买卡密窗 */
+        /* 购买卡密窗 + 制作成员窗 */
         .buyFloat, .teamFloat {
             position: fixed;
             top: 30%;
@@ -339,6 +377,7 @@
             color: #ffffff;
             text-align: center;
             margin-bottom: 12px;
+            text-shadow: 0 0 2px black;
         }
         .buyItem, .teamItem {
             padding: 8px 0;
@@ -360,7 +399,7 @@
         .closeRed { background: #aa4444; }
         .closeBlue { background: #4488ff; }
 
-        /* 格机页面 */
+        /* 格机黑屏模拟 */
         .gejiUi {
             position: fixed;
             inset: 0;
@@ -381,197 +420,42 @@
             color: #ccc;
         }
 
-        /* ========= 可拖拽音乐播放器悬浮窗 ========= */
-        .musicPlayer {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 340px;
-            background: rgba(10, 12, 26, 0.92);
-            backdrop-filter: blur(16px);
-            border-radius: 16px;
-            border: 2px solid rgba(255, 221, 0, 0.8);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            z-index: 10050;
-            overflow: hidden;
+        /* 调整播放器在移动端不遮挡内容，并使其可拖动 */
+        .aplayer.aplayer-fixed {
+            position: fixed !important;
+            bottom: auto !important;
+            right: auto !important;
+            top: 100px !important;
+            left: 20px !important;
+            width: 320px !important;
+            background: rgba(10, 12, 26, 0.95) !important;
+            backdrop-filter: blur(12px) !important;
+            border-radius: 16px !important;
+            border: 2px solid rgba(255, 221, 0, 0.7) !important;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+            z-index: 10050 !important;
             cursor: move;
         }
-        .playerHeader {
-            background: rgba(255, 221, 0, 0.85);
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: move;
-            user-select: none;
-            font-size: 13px;
-            font-weight: bold;
-            color: #1a1a2a;
-        }
-        .playerHeader span:first-child {
-            font-size: 12px;
-        }
-        .closePlayerBtn {
-            background: #aa3333;
-            border: none;
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .searchMusicBtn {
-            background: #ffaa33;
-            border: none;
-            color: #1a1a2a;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-left: 8px;
-        }
-        .aplayer-container {
-            background: transparent !important;
-        }
-        .musicPlayer .aplayer {
-            background: transparent !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-        }
-        .musicPlayer .aplayer .aplayer-info {
-            background: rgba(0,0,0,0.3) !important;
-        }
-        .aplayer .aplayer-info .aplayer-music .aplayer-title {
+        /* 播放器内部文字微调 */
+        .aplayer.aplayer-fixed .aplayer-info .aplayer-music .aplayer-title {
             color: #ffdd88 !important;
         }
-        .aplayer .aplayer-info .aplayer-music .aplayer-author {
+        .aplayer.aplayer-fixed .aplayer-info .aplayer-music .aplayer-author {
             color: #cccccc !important;
         }
-        .aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
+        .aplayer.aplayer-fixed .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar .aplayer-played {
             background: #ffd300 !important;
         }
-
-        /* ========= 音乐搜索悬浮窗 ========= */
-        .searchMusicWin {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 380px;
-            max-width: 90%;
-            background: rgba(16, 20, 32, 0.98);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            border: 2px solid rgba(255, 221, 0, 0.9);
-            z-index: 10060;
+        /* 隐藏多余固定模式按钮 */
+        .aplayer.aplayer-fixed .aplayer-lrc {
             display: none;
-            flex-direction: column;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
-            overflow: hidden;
         }
-        .searchHeader {
-            background: rgba(255, 221, 0, 0.9);
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: move;
-            color: #1a1a2a;
-            font-weight: bold;
-        }
-        .searchContent {
-            padding: 18px;
-        }
-        .searchInputArea {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-        .searchInputArea input {
-            flex: 1;
-            padding: 10px 14px;
-            background: #0b0e1a;
-            border: 1px solid #ffd966;
-            border-radius: 40px;
-            color: white;
-            outline: none;
-        }
-        .searchInputArea button {
-            background: #ffd300;
-            border: none;
-            padding: 0 18px;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #1a1a2a;
-        }
-        .searchResultList {
-            max-height: 320px;
-            overflow-y: auto;
-        }
-        .searchResultItem {
-            background: rgba(25, 30, 45, 0.7);
-            margin-bottom: 8px;
-            padding: 10px 12px;
-            border-radius: 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: 0.1s;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .searchResultItem:hover {
-            background: #ffd30030;
-            border-color: #ffd300;
-        }
-        .songInfo {
-            flex: 1;
-            color: #f0f0f0;
-        }
-        .songName {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .songArtist {
-            font-size: 11px;
-            color: #ccccaa;
-        }
-        .playIcon {
-            background: #ffd300;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #1a1a2a;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .closeSearchBtn {
-            background: #aa3333;
-            border: none;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
         @media (max-width: 500px) {
             .floatMenu { width: 280px; left: 10px; top: 60px; }
             .buyFloat, .teamFloat { right: 10px; width: 240px; }
-            .musicPlayer { width: 300px; bottom: 20px; right: 20px; }
-            .searchMusicWin { width: 340px; }
+            .aplayer.aplayer-fixed { width: 280px !important; left: 10px !important; top: 80px !important; }
         }
     </style>
-    <!-- 音乐播放器核心库 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 </head>
 <body>
 
@@ -610,7 +494,7 @@
     <button onclick="openSuper()">🚀 启动超自然行动组</button>
 </div>
 
-<!-- 功能悬浮窗 -->
+<!-- ----- 悬浮窗：多功能菜单 (全白字体已适配) ----- -->
 <div class="floatMenu" id="floatWin">
     <div class="floatHead" id="dragMove">
         <span>🎯 初心·全能菜单</span>
@@ -623,14 +507,16 @@
         <div data-tab="draw">绘制</div>
     </div>
     <div class="contentBox">
+        <!-- 主页 -->
         <div class="tabCon" id="home">
             <div class="opt"><button class="smBtn" onclick="showGeji()">⚠️ 格机</button></div>
             <div class="opt"><button class="smBtn">重载配置</button></div>
-            <div style="margin-top: 18px; background: #00000066; padding: 8px; border-radius: 16px;">
+            <div style="margin-top: 18px; background: #00000066; padding: 8px; border-radius: 16px; color: #ffffff;">
                 📢 公告：永久卡用户尊享全体系石头/木猪直接送<br>
                 超自然协议已加载 ｜ 自瞄优化版
             </div>
         </div>
+        <!-- 静默页 -->
         <div class="tabCon" id="silent" style="display:none">
             <div class="opt"><input type="checkbox" id="silentToggle"> <label>静默自瞄开关</label></div>
             <div class="opt">
@@ -638,16 +524,17 @@
                 <input type="range" id="bowR" min="1" max="100" value="36">
                 <span id="bowV">36</span>
             </div>
-            <div style="margin:12px 0;">⚙️ 自定义参数(上限100套)</div>
+            <div style="margin:12px 0; color:#ffffff;">⚙️ 自定义参数(上限100套)</div>
             <div class="opt">
-                <div>子弹速度：<input id="bulSpeed" style="width:60px;"></div>
-                <div>高伤补偿：<input id="dmgComp" style="width:60px;"></div>
-                <div>预判点数：<input id="predPoint" style="width:60px;"></div>
+                <div>子弹速度：<input id="bulSpeed" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>高伤补偿：<input id="dmgComp" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
+                <div>预判点数：<input id="predPoint" style="width:60px; background:#1e1f2e; border:1px solid #aaa; color:#fff;"></div>
             </div>
             <button class="smBtn" onclick="addParam()">➕ 添加参数</button>
             <button class="smBtn" onclick="delParam()">➖ 删减参数</button>
-            <div style="margin-top:8px;">📦 当前参数套数：<span id="pNum">0</span>/100</div>
+            <div style="margin-top:8px; color:#ffffff;">📦 当前参数套数：<span id="pNum">0</span>/100</div>
         </div>
+        <!-- 功能页 -->
         <div class="tabCon" id="func" style="display:none">
             <div class="opt"><input type="checkbox"> <label>长枪范围</label></div>
             <div class="opt"><input type="checkbox"> <label>折扇范围</label></div>
@@ -660,6 +547,7 @@
             <div class="opt"><label>场景加速</label><input type="range" min="1" max="40" value="12"></div>
             <div class="opt"><label>视野亮度</label><input type="range" min="1" max="50" value="18"></div>
         </div>
+        <!-- 绘制页 -->
         <div class="tabCon" id="draw" style="display:none">
             <div class="opt"><input type="checkbox"> <label>绘制方框</label></div>
             <div class="opt"><input type="checkbox"> <label>绘制射线</label></div>
@@ -689,226 +577,19 @@
     <button class="closeBtn closeBlue" onclick="closeTeam()">关闭</button>
 </div>
 
-<!-- 格机黑屏 -->
+<!-- 格机黑屏（模拟Demo） -->
 <div class="gejiUi" id="gejiBox">
     💀 你被格机了！ 💀<br>
     <span>(演示效果 无实际破坏)</span>
 </div>
 
-<!-- ========= 可拖拽音乐播放器悬浮窗（带搜索按钮） ========= -->
-<div class="musicPlayer" id="musicPlayer">
-    <div class="playerHeader" id="playerDrag">
-        <span>🎵 幻昼 · 初心推荐 <button class="searchMusicBtn" onclick="openSearchMusic()">🔍 搜歌</button></span>
-        <button class="closePlayerBtn" onclick="closeMusicPlayer()">✖</button>
-    </div>
-    <div id="aplayerContainer"></div>
-</div>
-
-<!-- ========= 音乐搜索悬浮窗（可拖拽） ========= -->
-<div class="searchMusicWin" id="searchWin">
-    <div class="searchHeader" id="searchDrag">
-        <span>🎧 搜索网易云音乐</span>
-        <button class="closeSearchBtn" onclick="closeSearchWin()">✖</button>
-    </div>
-    <div class="searchContent">
-        <div class="searchInputArea">
-            <input type="text" id="searchKeyword" placeholder="输入歌名/歌手..." autocomplete="off">
-            <button onclick="searchSong()">搜索</button>
-        </div>
-        <div id="searchResults" class="searchResultList">
-            <div style="text-align:center;color:#aaa;padding:20px;">输入关键词后点击搜索</div>
-        </div>
-    </div>
-</div>
-
+<!-- 音乐播放器：网易云单曲《幻昼》ID:3336901873，支持拖拽 -->
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<meting-js server="netease" type="song" id="3336901873" fixed="true" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
+
 <script>
-    // ---------- 音乐播放器 ----------
-    let currentAudio = {
-        name: '幻昼',
-        artist: '初心推荐',
-        url: 'https://music.163.com/song/media/outer/url?id=3336901873.mp3',
-        cover: 'https://picsum.photos/200/200?random=1'
-    };
-    
-    const ap = new APlayer({
-        container: document.getElementById('aplayerContainer'),
-        fixed: false,
-        autoplay: false,
-        theme: '#ffd300',
-        audio: [currentAudio]
-    });
-
-    // 更新播放器歌曲
-    function updatePlayer(songName, artist, songUrl) {
-        ap.list.clear();
-        ap.list.add({
-            name: songName,
-            artist: artist || '初心推荐',
-            url: songUrl,
-            cover: 'https://picsum.photos/200/200?random=' + Date.now()
-        });
-        ap.play();
-    }
-
-    // ---------- 音乐搜索功能（通过网易云API转发）----------
-    // 使用免费的网易云音乐搜索接口 (跨域可用)
-    async function searchSong() {
-        const keyword = document.getElementById('searchKeyword').value.trim();
-        if (!keyword) {
-            alert('请输入歌曲名或歌手');
-            return;
-        }
-        const resultsDiv = document.getElementById('searchResults');
-        resultsDiv.innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;">🔍 搜索中...</div>';
-        
-        try {
-            // 使用第三方网易云音乐搜索代理API (稳定且支持CORS)
-            const apiUrl = `https://api.uomg.com/api/search?key=${encodeURIComponent(keyword)}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            
-            if (data.code === 200 && data.data && data.data.length > 0) {
-                renderSearchResults(data.data);
-            } else {
-                resultsDiv.innerHTML = '<div style="text-align:center;color:#ffaa66;padding:20px;">😢 没有找到相关歌曲</div>';
-            }
-        } catch (err) {
-            console.error(err);
-            resultsDiv.innerHTML = '<div style="text-align:center;color:#ff8866;padding:20px;">❌ 搜索失败，请稍后重试</div>';
-        }
-    }
-    
-    function renderSearchResults(songs) {
-        const resultsDiv = document.getElementById('searchResults');
-        resultsDiv.innerHTML = '';
-        songs.slice(0, 18).forEach(song => {
-            const item = document.createElement('div');
-            item.className = 'searchResultItem';
-            const songName = song.name || '未知歌曲';
-            const artist = song.artist || (song.singer ? song.singer : '未知歌手');
-            const songId = song.rid || song.id;
-            
-            item.innerHTML = `
-                <div class="songInfo">
-                    <div class="songName">${escapeHtml(songName)}</div>
-                    <div class="songArtist">${escapeHtml(artist)}</div>
-                </div>
-                <div class="playIcon" data-id="${songId}" data-name="${escapeHtml(songName)}" data-artist="${escapeHtml(artist)}">▶</div>
-            `;
-            resultsDiv.appendChild(item);
-        });
-        
-        // 绑定播放事件
-        document.querySelectorAll('.playIcon').forEach(icon => {
-            icon.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const songId = icon.getAttribute('data-id');
-                const songName = icon.getAttribute('data-name');
-                const songArtist = icon.getAttribute('data-artist');
-                if (songId) {
-                    const playUrl = `https://music.163.com/song/media/outer/url?id=${songId}.mp3`;
-                    updatePlayer(songName, songArtist, playUrl);
-                    closeSearchWin();
-                } else {
-                    alert('无法获取播放链接');
-                }
-            });
-        });
-    }
-    
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // 搜索窗口拖拽
-    let searchWin = document.getElementById('searchWin');
-    let searchDrag = document.getElementById('searchDrag');
-    let isDragSearch = false, sOffX, sOffY;
-    
-    if (searchDrag) {
-        searchDrag.addEventListener('mousedown', (e) => {
-            if (e.target.classList && e.target.classList.contains('closeSearchBtn')) return;
-            isDragSearch = true;
-            sOffX = e.clientX - searchWin.offsetLeft;
-            sOffY = e.clientY - searchWin.offsetTop;
-            searchWin.style.cursor = 'grabbing';
-            e.preventDefault();
-        });
-    }
-    
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragSearch) return;
-        let leftVal = e.clientX - sOffX;
-        let topVal = e.clientY - sOffY;
-        leftVal = Math.min(window.innerWidth - searchWin.offsetWidth - 10, Math.max(10, leftVal));
-        topVal = Math.min(window.innerHeight - 150, Math.max(30, topVal));
-        searchWin.style.left = leftVal + 'px';
-        searchWin.style.top = topVal + 'px';
-        searchWin.style.transform = 'none';
-    });
-    
-    document.addEventListener('mouseup', () => {
-        isDragSearch = false;
-        if (searchWin) searchWin.style.cursor = '';
-    });
-    
-    function openSearchMusic() {
-        searchWin.style.display = 'flex';
-        searchWin.style.left = '50%';
-        searchWin.style.top = '100px';
-        searchWin.style.transform = 'translateX(-50%)';
-        document.getElementById('searchKeyword').value = '';
-        document.getElementById('searchResults').innerHTML = '<div style="text-align:center;color:#aaa;padding:20px;">输入关键词后点击搜索</div>';
-    }
-    
-    function closeSearchWin() {
-        searchWin.style.display = 'none';
-    }
-    
-    // 音乐播放器拖拽
-    let musicPlayer = document.getElementById('musicPlayer');
-    let playerDrag = document.getElementById('playerDrag');
-    let dragActive2 = false, offsetX2, offsetY2;
-    
-    playerDrag.addEventListener('mousedown', (e) => {
-        if (e.target.classList && e.target.classList.contains('closePlayerBtn')) return;
-        if (e.target.classList && e.target.classList.contains('searchMusicBtn')) return;
-        dragActive2 = true;
-        offsetX2 = e.clientX - musicPlayer.offsetLeft;
-        offsetY2 = e.clientY - musicPlayer.offsetTop;
-        musicPlayer.style.cursor = 'grabbing';
-        e.preventDefault();
-    });
-    
-    document.addEventListener('mousemove', (e) => {
-        if (!dragActive2) return;
-        let leftVal = e.clientX - offsetX2;
-        let topVal = e.clientY - offsetY2;
-        leftVal = Math.min(window.innerWidth - musicPlayer.offsetWidth - 10, Math.max(10, leftVal));
-        topVal = Math.min(window.innerHeight - 100, Math.max(20, topVal));
-        musicPlayer.style.left = leftVal + 'px';
-        musicPlayer.style.top = topVal + 'px';
-        musicPlayer.style.bottom = 'auto';
-        musicPlayer.style.right = 'auto';
-    });
-    
-    document.addEventListener('mouseup', () => {
-        dragActive2 = false;
-        if(musicPlayer) musicPlayer.style.cursor = '';
-    });
-    
-    function closeMusicPlayer() {
-        musicPlayer.style.display = 'none';
-    }
-    
-    // 雪花特效
+    // -------------------- 雪花特效 --------------------
     function createSnow() {
         let snow = document.createElement("div");
         snow.className = "snow";
@@ -922,7 +603,7 @@
     }
     setInterval(createSnow, 220);
 
-    // 验证密码
+    // 验证密码 (密钥: 初心NB)
     function checkPwd() {
         let pwd = document.getElementById("pwdInp").value.trim();
         if (pwd === "初心NB") {
@@ -932,6 +613,7 @@
         }
     }
 
+    // 下一步：加载进度条
     function nextStep() {
         document.getElementById("msgModal").classList.add("hide");
         document.getElementById("page1").classList.remove("active");
@@ -956,6 +638,7 @@
         }, 28);
     }
 
+    // 悬浮窗控制
     let floatWin = document.getElementById("floatWin");
     function openFloat() { floatWin.style.display = "flex"; }
     function closeFloat() { floatWin.style.display = "none"; }
@@ -970,6 +653,7 @@
 
     function openSuper() { alert("✨ 超自然行动组已启动 · 全功能稳定运行 ✨"); }
 
+    // 标签切换
     let tabs = document.querySelectorAll(".tabNav div");
     let contents = document.querySelectorAll(".tabCon");
     tabs.forEach((tab, idx) => {
@@ -981,12 +665,14 @@
         };
     });
 
+    // 爆炸弓实时数值
     let bowRange = document.getElementById("bowR");
     let bowSpan = document.getElementById("bowV");
     if (bowRange) {
         bowRange.oninput = () => { bowSpan.innerText = bowRange.value; };
     }
 
+    // 自定义参数逻辑 (演示)
     let paramCount = 0;
     function addParam() {
         if (paramCount >= 100) { alert("已达到100套参数上限！"); return; }
@@ -998,12 +684,14 @@
         document.getElementById("pNum").innerText = paramCount;
     }
 
+    // 格机效果（纯展示）
     function showGeji() {
         let gejiDiv = document.getElementById("gejiBox");
         gejiDiv.style.display = "flex";
         setTimeout(() => { gejiDiv.style.display = "none"; }, 2500);
     }
 
+    // 功能悬浮窗拖动
     let dragItem = document.getElementById("dragMove");
     let dragActive = false, offsetX, offsetY;
     dragItem.addEventListener("mousedown", (e) => {
@@ -1026,6 +714,60 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
+    // ---------- 音乐播放器拖拽功能（让 .aplayer-fixed 可拖动）----------
+    function initMusicPlayerDrag() {
+        const player = document.querySelector('.aplayer-fixed');
+        if (!player) {
+            setTimeout(initMusicPlayerDrag, 200);
+            return;
+        }
+        // 确保播放器初始位置
+        player.style.position = 'fixed';
+        player.style.top = '100px';
+        player.style.left = '20px';
+        player.style.bottom = 'auto';
+        player.style.right = 'auto';
+        player.style.cursor = 'move';
+        
+        let isDragging = false;
+        let startX, startY, startLeft, startTop;
+        
+        const onMouseMove = (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            let newLeft = startLeft + (e.clientX - startX);
+            let newTop = startTop + (e.clientY - startY);
+            newLeft = Math.min(window.innerWidth - player.offsetWidth - 10, Math.max(10, newLeft));
+            newTop = Math.min(window.innerHeight - 80, Math.max(20, newTop));
+            player.style.left = newLeft + 'px';
+            player.style.top = newTop + 'px';
+        };
+        
+        const onMouseUp = () => {
+            isDragging = false;
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            if (player) player.style.transition = '';
+        };
+        
+        player.addEventListener('mousedown', (e) => {
+            // 阻止点击到内部按钮时触发拖拽过于敏感，但不影响播放按钮
+            if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon') || e.target.closest('.aplayer-volume-bar-wrap')) {
+                return;
+            }
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = player.offsetLeft;
+            startTop = player.offsetTop;
+            player.style.transition = 'none';
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+            e.preventDefault();
+        });
+    }
+    
+    // 悬浮窗初始位置修正
     window.addEventListener("load", () => {
         if(floatWin) {
             floatWin.style.left = "20px";
@@ -1037,6 +779,9 @@
         if(compInput) compInput.value = "72";
         let predInput = document.getElementById("predPoint");
         if(predInput) predInput.value = "93";
+        
+        // 初始化音乐播放器拖拽
+        initMusicPlayerDrag();
     });
 </script>
 </body>
