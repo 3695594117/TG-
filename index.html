@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>faiwnhd初心 · 超自然力量</title>
+    <!-- 音乐播放器样式库 (APlayer) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
     <style>
         * {
             margin: 0;
@@ -358,7 +360,7 @@
         }
         .gejiUi span { font-size: 1rem; color: #ccc; }
 
-        /* ========= 可拖拽音乐播放器容器 ========= */
+        /* ========= 音乐播放器 - 可拖拽容器 ========= */
         .drag-player-container {
             position: fixed;
             bottom: 30px;
@@ -367,6 +369,7 @@
             z-index: 10050;
             cursor: move;
         }
+        /* 保持 meting-js 原始样式（简洁漂亮） */
         .drag-player-container .aplayer {
             margin: 0 !important;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4) !important;
@@ -377,19 +380,13 @@
         }
         .drag-player-container .aplayer .aplayer-lrc { display: none !important; }
         .drag-player-container .aplayer .aplayer-info .aplayer-music .aplayer-title { color: #ffd300 !important; }
-        
-        /* 让封面图片可以点击暂停/播放 */
-        .drag-player-container .aplayer .aplayer-pic {
-            cursor: pointer !important;
-        }
+        .drag-player-container .aplayer .aplayer-info .aplayer-music .aplayer-author { color: #cccccc !important; }
         
         @media (max-width: 500px) {
             .drag-player-container { width: 280px; bottom: 20px; right: 10px; }
             .floatMenu { width: 280px; left: 10px; top: 60px; }
         }
     </style>
-    <!-- 音乐播放器样式库 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 </head>
 <body>
 
@@ -513,7 +510,7 @@
     <span>(演示效果 无实际破坏)</span>
 </div>
 
-<!-- ========= 可拖拽音乐播放器 ========= -->
+<!-- ========= 音乐播放器（原始 meting-js 简洁样式 + 可拖动） ========= -->
 <div id="dragPlayerContainer" class="drag-player-container">
     <meting-js server="netease" type="song" id="3336901873" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
 </div>
@@ -618,7 +615,7 @@
         setTimeout(() => { gejiDiv.style.display = "none"; }, 2500);
     }
 
-    // 功能悬浮窗拖动 - 修复边界限制，允许拖到任意位置
+    // 功能悬浮窗拖动
     let dragItem = document.getElementById("dragMove");
     let dragActive = false, offsetX, offsetY;
     
@@ -634,7 +631,6 @@
         if (!dragActive) return;
         let leftVal = e.clientX - offsetX;
         let topVal = e.clientY - offsetY;
-        // 移除边界限制，允许拖到屏幕边缘（保留一点点边距防止完全看不见）
         leftVal = Math.min(window.innerWidth - 50, Math.max(-floatWin.offsetWidth + 50, leftVal));
         topVal = Math.min(window.innerHeight - 30, Math.max(-floatWin.offsetHeight + 80, topVal));
         floatWin.style.left = leftVal + "px";
@@ -676,21 +672,16 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
-    // ========= 音乐播放器容器拖拽（无边界限制） =========
+    // ========= 音乐播放器容器拖拽（保留拖动功能） =========
     const playerContainer = document.getElementById('dragPlayerContainer');
     let isDraggingPlayer = false;
     let startMouseX, startMouseY, startContainerLeft, startContainerTop;
     
-    // 鼠标拖拽
     playerContainer.addEventListener('mousedown', (e) => {
-        // 如果点到播放器内部的封面图片或按钮，不触发拖拽（但封面我们想用来播放/暂停，所以除外）
+        // 点到播放器内部按钮时不触发拖拽
         if (e.target.closest('.aplayer-play') || 
             e.target.closest('.aplayer-icon') || 
             e.target.closest('.aplayer-volume-bar-wrap')) {
-            return;
-        }
-        // 如果点到封面图片，不拖拽（让封面处理播放暂停）
-        if (e.target.closest('.aplayer-pic')) {
             return;
         }
         isDraggingPlayer = true;
@@ -706,7 +697,6 @@
         if (!isDraggingPlayer) return;
         let newLeft = startContainerLeft + (e.clientX - startMouseX);
         let newTop = startContainerTop + (e.clientY - startMouseY);
-        // 移除边界限制，允许拖到屏幕任意位置（保留一点边距）
         newLeft = Math.min(window.innerWidth - 50, Math.max(-playerContainer.offsetWidth + 50, newLeft));
         newTop = Math.min(window.innerHeight - 30, Math.max(-playerContainer.offsetHeight + 80, newTop));
         playerContainer.style.left = newLeft + 'px';
@@ -723,7 +713,6 @@
     // 手机触摸拖拽
     playerContainer.addEventListener('touchstart', (e) => {
         if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon')) return;
-        if (e.target.closest('.aplayer-pic')) return;
         const touch = e.touches[0];
         isDraggingPlayer = true;
         startMouseX = touch.clientX;
@@ -749,23 +738,6 @@
     document.addEventListener('touchend', () => {
         isDraggingPlayer = false;
     });
-    
-    // ========= 让封面图片可以点击暂停/播放 =========
-    function enableCoverClick() {
-        const coverPic = document.querySelector('.drag-player-container .aplayer-pic');
-        if (coverPic) {
-            coverPic.style.cursor = 'pointer';
-            coverPic.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const playBtn = document.querySelector('.drag-player-container .aplayer-play');
-                if (playBtn) {
-                    playBtn.click();
-                }
-            });
-        } else {
-            setTimeout(enableCoverClick, 300);
-        }
-    }
 
     window.addEventListener("load", () => {
         if(floatWin) {
@@ -785,9 +757,6 @@
         playerContainer.style.right = '20px';
         playerContainer.style.left = 'auto';
         playerContainer.style.top = 'auto';
-        
-        // 启用封面点击播放暂停
-        setTimeout(enableCoverClick, 500);
     });
 </script>
 </body>
