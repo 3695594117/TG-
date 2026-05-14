@@ -187,7 +187,7 @@
             transition: width 0.06s linear;
         }
 
-        /* 主功能页面 */
+        /* 主功能页面 - 按钮样式优化 */
         .mainPage { gap: 18px; }
         .mainPage h3 {
             color: #ffffff;
@@ -211,15 +211,18 @@
             color: #000000;
         }
         
-        /* 音乐切换按钮特殊样式 */
+        /* 音乐切换按钮 - 醒目金色样式 */
         .music-switch-btn {
             background: #ffd300 !important;
             color: #1a1a2a !important;
             border: 2px solid #ffd300 !important;
+            box-shadow: 0 0 10px rgba(255,211,0,0.5);
         }
         .music-switch-btn:hover {
             background: #ffdd44 !important;
             color: #000000 !important;
+            box-shadow: 0 0 15px rgba(255,211,0,0.8);
+            transform: scale(0.98);
         }
 
         /* 功能悬浮窗 */
@@ -427,14 +430,14 @@
     <div style="font-size: 12px; margin-top: 12px; color: #ffffff;">解除ACE · 连接主服务器</div>
 </div>
 
-<!-- 3. 主功能页（增加了音乐切换按钮） -->
+<!-- 3. 主功能页（按钮顺序调整：切换音乐放在启动超自然行动组上面） -->
 <div class="page mainPage hide" id="page3">
     <h3>✅ 服务器连接正常</h3>
     <button onclick="openFloat()">⚙️ 开启功能悬浮窗</button>
     <button onclick="openBuy()">💎 购买卡密</button>
     <button onclick="openTeam()">👥 制作成员</button>
+    <button class="music-switch-btn" onclick="switchMusic()">🎵 切换音乐（幻昼 ↔ Sinos）</button>
     <button onclick="openSuper()">🚀 启动超自然行动组</button>
-    <button class="music-switch-btn" onclick="switchMusic()">🎵 切换音乐</button>
 </div>
 
 <!-- 功能悬浮窗 -->
@@ -532,7 +535,7 @@
 
 <script>
     // 音乐切换状态
-    let currentMusicId = "3336901873";  // 当前播放的音乐ID
+    let currentMusicId = "3336901873";
     let currentMusicName = "幻昼";
     
     // 音乐列表
@@ -540,12 +543,11 @@
         { id: "3336901873", name: "幻昼" },
         { id: "3363141932", name: "Sinos Denatai" }
     ];
-    let musicIndex = 0;  // 0=幻昼, 1=Sinos Denatai
+    let musicIndex = 0;
     
     // 获取播放器实例
     let playerInstance = null;
     
-    // 等待播放器加载完成
     function waitForPlayer() {
         return new Promise((resolve) => {
             const checkInterval = setInterval(() => {
@@ -564,27 +566,18 @@
     
     // 切换音乐
     async function switchMusic() {
-        // 切换索引
         musicIndex = (musicIndex + 1) % musicList.length;
         const newMusic = musicList[musicIndex];
         
-        // 显示切换提示
-        const currentSongName = document.querySelector('.drag-player-container .aplayer-info .aplayer-title');
-        if (currentSongName) {
-            currentSongName.style.opacity = '0.5';
-        }
-        
-        // 重新创建播放器
-        const container = document.getElementById('dragPlayerContainer');
-        const oldMeting = container.querySelector('meting-js');
-        
-        // 保存当前播放状态（是否正在播放）
+        // 保存当前播放状态
         let wasPlaying = false;
         if (playerInstance && !playerInstance.audio.paused) {
             wasPlaying = true;
         }
         
-        // 创建新的 meting-js 元素
+        // 重新创建播放器
+        const container = document.getElementById('dragPlayerContainer');
+        const oldMeting = container.querySelector('meting-js');
         const newMeting = document.createElement('meting-js');
         newMeting.setAttribute('server', 'netease');
         newMeting.setAttribute('type', 'song');
@@ -593,35 +586,22 @@
         newMeting.setAttribute('autoplay', wasPlaying ? 'true' : 'false');
         newMeting.setAttribute('volume', '0.6');
         
-        // 替换
-        if (oldMeting) {
-            oldMeting.remove();
-        }
+        if (oldMeting) oldMeting.remove();
         container.appendChild(newMeting);
         
-        // 重新绑定播放器实例
         setTimeout(async () => {
             playerInstance = await waitForPlayer();
             if (playerInstance && wasPlaying) {
-                setTimeout(() => {
-                    playerInstance.play();
-                }, 500);
-            }
-            
-            // 恢复透明度
-            const newSongName = document.querySelector('.drag-player-container .aplayer-info .aplayer-title');
-            if (newSongName) {
-                newSongName.style.opacity = '1';
+                setTimeout(() => playerInstance.play(), 500);
             }
         }, 500);
         
-        // 弹出提示
+        // 显示切换提示
         showMusicSwitchTip(newMusic.name);
     }
     
-    // 显示音乐切换提示（悬浮提示）
+    // 显示切换提示
     function showMusicSwitchTip(songName) {
-        // 创建临时提示
         const tip = document.createElement('div');
         tip.innerText = `🎵 已切换至：${songName}`;
         tip.style.cssText = `
@@ -641,8 +621,6 @@
             white-space: nowrap;
             animation: fadeOut 2s ease forwards;
         `;
-        
-        // 添加动画样式
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeOut {
@@ -652,13 +630,8 @@
             }
         `;
         document.head.appendChild(style);
-        
         document.body.appendChild(tip);
-        
-        // 2秒后移除
-        setTimeout(() => {
-            tip.remove();
-        }, 2000);
+        setTimeout(() => tip.remove(), 2000);
     }
     
     // 雪花特效
@@ -704,7 +677,6 @@
                     document.getElementById("page2").classList.add("hide");
                     document.getElementById("page3").classList.remove("hide");
                     document.getElementById("page3").classList.add("active");
-                    // 页面加载完成后获取播放器实例
                     setTimeout(async () => {
                         playerInstance = await waitForPlayer();
                     }, 1000);
@@ -790,7 +762,6 @@
         if(floatWin) floatWin.style.cursor = "";
     });
     
-    // 触摸屏支持
     dragItem.addEventListener("touchstart", (e) => {
         const touch = e.touches[0];
         dragActive = true;
@@ -818,7 +789,7 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
-    // ========= 音乐播放器容器拖拽 =========
+    // 音乐播放器容器拖拽
     const playerContainer = document.getElementById('dragPlayerContainer');
     let isDraggingPlayer = false;
     let startMouseX, startMouseY, startContainerLeft, startContainerTop;
@@ -855,7 +826,6 @@
         playerContainer.style.cursor = '';
     });
     
-    // 手机触摸拖拽
     playerContainer.addEventListener('touchstart', (e) => {
         if (e.target.closest('.aplayer-play') || e.target.closest('.aplayer-icon')) return;
         const touch = e.touches[0];
@@ -902,7 +872,6 @@
         playerContainer.style.left = 'auto';
         playerContainer.style.top = 'auto';
         
-        // 获取播放器实例
         setTimeout(async () => {
             playerInstance = await waitForPlayer();
         }, 1500);
