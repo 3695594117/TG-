@@ -204,10 +204,22 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
         }
         .mainPage button:hover {
             background: rgba(255,255,255,0.8);
             color: #000000;
+        }
+        
+        /* 音乐切换按钮特殊样式 */
+        .music-switch-btn {
+            background: #ffd300 !important;
+            color: #1a1a2a !important;
+            border: 2px solid #ffd300 !important;
+        }
+        .music-switch-btn:hover {
+            background: #ffdd44 !important;
+            color: #000000 !important;
         }
 
         /* 功能悬浮窗 */
@@ -369,7 +381,6 @@
             z-index: 10050;
             cursor: move;
         }
-        /* 保持 meting-js 原始样式（简洁漂亮） */
         .drag-player-container .aplayer {
             margin: 0 !important;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4) !important;
@@ -416,13 +427,14 @@
     <div style="font-size: 12px; margin-top: 12px; color: #ffffff;">解除ACE · 连接主服务器</div>
 </div>
 
-<!-- 3. 主功能页 -->
+<!-- 3. 主功能页（增加了音乐切换按钮） -->
 <div class="page mainPage hide" id="page3">
     <h3>✅ 服务器连接正常</h3>
     <button onclick="openFloat()">⚙️ 开启功能悬浮窗</button>
     <button onclick="openBuy()">💎 购买卡密</button>
     <button onclick="openTeam()">👥 制作成员</button>
     <button onclick="openSuper()">🚀 启动超自然行动组</button>
+    <button class="music-switch-btn" onclick="switchMusic()">🎵 切换音乐</button>
 </div>
 
 <!-- 功能悬浮窗 -->
@@ -512,13 +524,143 @@
 
 <!-- ========= 音乐播放器（原始 meting-js 简洁样式 + 可拖动） ========= -->
 <div id="dragPlayerContainer" class="drag-player-container">
-    <meting-js server="netease" type="song" id="3336901873" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
+    <meting-js id="metingPlayer" server="netease" type="song" id="3336901873" theme="#ffd300" autoplay="false" volume="0.6"></meting-js>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
 
 <script>
+    // 音乐切换状态
+    let currentMusicId = "3336901873";  // 当前播放的音乐ID
+    let currentMusicName = "幻昼";
+    
+    // 音乐列表
+    const musicList = [
+        { id: "3336901873", name: "幻昼" },
+        { id: "3363141932", name: "Sinos Denatai" }
+    ];
+    let musicIndex = 0;  // 0=幻昼, 1=Sinos Denatai
+    
+    // 获取播放器实例
+    let playerInstance = null;
+    
+    // 等待播放器加载完成
+    function waitForPlayer() {
+        return new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+                const playerDiv = document.querySelector('.drag-player-container .aplayer');
+                if (playerDiv && playerDiv._aplayer) {
+                    clearInterval(checkInterval);
+                    resolve(playerDiv._aplayer);
+                }
+            }, 200);
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                resolve(null);
+            }, 5000);
+        });
+    }
+    
+    // 切换音乐
+    async function switchMusic() {
+        // 切换索引
+        musicIndex = (musicIndex + 1) % musicList.length;
+        const newMusic = musicList[musicIndex];
+        
+        // 显示切换提示
+        const currentSongName = document.querySelector('.drag-player-container .aplayer-info .aplayer-title');
+        if (currentSongName) {
+            currentSongName.style.opacity = '0.5';
+        }
+        
+        // 重新创建播放器
+        const container = document.getElementById('dragPlayerContainer');
+        const oldMeting = container.querySelector('meting-js');
+        
+        // 保存当前播放状态（是否正在播放）
+        let wasPlaying = false;
+        if (playerInstance && !playerInstance.audio.paused) {
+            wasPlaying = true;
+        }
+        
+        // 创建新的 meting-js 元素
+        const newMeting = document.createElement('meting-js');
+        newMeting.setAttribute('server', 'netease');
+        newMeting.setAttribute('type', 'song');
+        newMeting.setAttribute('id', newMusic.id);
+        newMeting.setAttribute('theme', '#ffd300');
+        newMeting.setAttribute('autoplay', wasPlaying ? 'true' : 'false');
+        newMeting.setAttribute('volume', '0.6');
+        
+        // 替换
+        if (oldMeting) {
+            oldMeting.remove();
+        }
+        container.appendChild(newMeting);
+        
+        // 重新绑定播放器实例
+        setTimeout(async () => {
+            playerInstance = await waitForPlayer();
+            if (playerInstance && wasPlaying) {
+                setTimeout(() => {
+                    playerInstance.play();
+                }, 500);
+            }
+            
+            // 恢复透明度
+            const newSongName = document.querySelector('.drag-player-container .aplayer-info .aplayer-title');
+            if (newSongName) {
+                newSongName.style.opacity = '1';
+            }
+        }, 500);
+        
+        // 弹出提示
+        showMusicSwitchTip(newMusic.name);
+    }
+    
+    // 显示音乐切换提示（悬浮提示）
+    function showMusicSwitchTip(songName) {
+        // 创建临时提示
+        const tip = document.createElement('div');
+        tip.innerText = `🎵 已切换至：${songName}`;
+        tip.style.cssText = `
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: #ffd300;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 20000;
+            border: 1px solid #ffd300;
+            backdrop-filter: blur(8px);
+            white-space: nowrap;
+            animation: fadeOut 2s ease forwards;
+        `;
+        
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                70% { opacity: 1; }
+                100% { opacity: 0; transform: translateX(-50%) translateY(-20px); visibility: hidden; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(tip);
+        
+        // 2秒后移除
+        setTimeout(() => {
+            tip.remove();
+        }, 2000);
+    }
+    
     // 雪花特效
     function createSnow() {
         let snow = document.createElement("div");
@@ -562,6 +704,10 @@
                     document.getElementById("page2").classList.add("hide");
                     document.getElementById("page3").classList.remove("hide");
                     document.getElementById("page3").classList.add("active");
+                    // 页面加载完成后获取播放器实例
+                    setTimeout(async () => {
+                        playerInstance = await waitForPlayer();
+                    }, 1000);
                 }, 400);
             }
         }, 28);
@@ -672,13 +818,12 @@
         if(floatWin) floatWin.style.cursor = "";
     });
 
-    // ========= 音乐播放器容器拖拽（保留拖动功能） =========
+    // ========= 音乐播放器容器拖拽 =========
     const playerContainer = document.getElementById('dragPlayerContainer');
     let isDraggingPlayer = false;
     let startMouseX, startMouseY, startContainerLeft, startContainerTop;
     
     playerContainer.addEventListener('mousedown', (e) => {
-        // 点到播放器内部按钮时不触发拖拽
         if (e.target.closest('.aplayer-play') || 
             e.target.closest('.aplayer-icon') || 
             e.target.closest('.aplayer-volume-bar-wrap')) {
@@ -751,12 +896,16 @@
         let predInput = document.getElementById("predPoint");
         if(predInput) predInput.value = "93";
         
-        // 设置播放器容器初始位置
         playerContainer.style.position = 'fixed';
         playerContainer.style.bottom = '30px';
         playerContainer.style.right = '20px';
         playerContainer.style.left = 'auto';
         playerContainer.style.top = 'auto';
+        
+        // 获取播放器实例
+        setTimeout(async () => {
+            playerInstance = await waitForPlayer();
+        }, 1500);
     });
 </script>
 </body>
